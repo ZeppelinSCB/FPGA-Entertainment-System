@@ -1,6 +1,6 @@
-# FPGA Entertainment System
+# FPGA Entertainment System - Snake
 ## Introduction
-This project aim to create a Snake Game on Cyclone IV FPGA Chips. The game should have following feature:
+The FES-Snake project aim to create a Snake Game on Cyclone IV FPGA Chips. The game should have following feature:
 + User Interface
   + Main Menu
 + In Game Experience
@@ -9,7 +9,7 @@ This project aim to create a Snake Game on Cyclone IV FPGA Chips. The game shoul
   + 8 bit color image
 
 ## Block Design
-+ Console System
++ Console System (TODO)
   + Console State Machine
 + Cartridge System
   + Menu
