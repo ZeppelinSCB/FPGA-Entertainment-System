@@ -9,6 +9,7 @@ module pixel_renderer(
     input wire            food_y,
     input wire [14:0]     block_x[20:0],
     input wire [14:0]     block_y[20:0],
+    input wire [12:0]     snake_cur_len,
 
     //Pixel Data Output	 
     output     reg [15:0] pixel_data	
@@ -50,8 +51,8 @@ always @(posedge vga_clk or negedge sys_rst_n) begin
 			     && (pixel_ypos >= food_y) && (pixel_ypos < food_y + BLOCK_W))
 		         pixel_data <= WHITE;   //绘制食物方块为白色
 
-		// 根据蛇的长度cur_len，绘制相应长度的蛇 
-        else if(cur_len == 1)//绘制一节的蛇
+		// 根据蛇的长度snake_cur_len，绘制相应长度的蛇 
+        else if(snake_cur_len == 1)//绘制一节的蛇
 		begin          
 			// 如果是一节蛇，检查当前像素是否在蛇头的方块内，如果是，则绘制红色色蛇头			
 		     if((pixel_xpos >= block_x[0]) && (pixel_xpos < block_x[0] + BLOCK_W)
@@ -60,7 +61,7 @@ always @(posedge vga_clk or negedge sys_rst_n) begin
 		     else // 如果不在蛇头内，则绘制黑色背景
                  pixel_data <= BLACK;                //绘制背景为黑色
         end
-		else if(cur_len == 2)//绘制两节的蛇
+		else if(snake_cur_len == 2)//绘制两节的蛇
 		begin                   
 			//如果是两节蛇，检查当前像素是否在蛇头或蛇身的方块内 
 		      if((pixel_xpos >= block_x[0]) && (pixel_xpos < block_x[0] + BLOCK_W)
@@ -79,7 +80,7 @@ always @(posedge vga_clk or negedge sys_rst_n) begin
 			  		end
 				    
 		end
-		else if(cur_len == 3) //绘制三节蛇
+		else if(snake_cur_len == 3) //绘制三节蛇
 		begin                    
 		    if((pixel_xpos >= block_x[0]) && (pixel_xpos < block_x[0] + BLOCK_W)
 			    && (pixel_ypos >= block_y[0]) && (pixel_ypos < block_y[0] + BLOCK_W))
@@ -105,7 +106,7 @@ always @(posedge vga_clk or negedge sys_rst_n) begin
 				end
 		        
 	    end
-        else if(cur_len == 4)//绘制最上的4节蛇
+        else if(snake_cur_len == 4)//绘制最上的4节蛇
 		begin
 		    if((pixel_xpos >= block_x[0]) && (pixel_xpos < block_x[0] + BLOCK_W)
 			    && (pixel_ypos >= block_y[0]) && (pixel_ypos < block_y[0] + BLOCK_W))
@@ -126,7 +127,7 @@ always @(posedge vga_clk or negedge sys_rst_n) begin
 		        pixel_data <= BLACK;//绘制背景为白色 
 	    end
 
-	    else if(cur_len == 5) 
+	    else if(snake_cur_len == 5) 
 		begin
 		    if((pixel_xpos >= block_x[0]) && (pixel_xpos < block_x[0] + BLOCK_W)
 			    && (pixel_ypos >= block_y[0]) && (pixel_ypos < block_y[0] + BLOCK_W))
@@ -153,7 +154,7 @@ always @(posedge vga_clk or negedge sys_rst_n) begin
 
 	/*
 		// 继续绘制更长的蛇身体
-		else if(cur_len == 6) begin
+		else if(snake_cur_len == 6) begin
 		    // 默认设置像素数据为背景色
 		    pixel_data <= BLACK;
 
@@ -203,44 +204,6 @@ always @(posedge vga_clk or negedge sys_rst_n) begin
 		    else
 		        pixel_data <= WHITE;                //绘制背景为白色 
 		end
-    end
-end
-
-
-
-
-//判断蛇是否撞墙
-/*
-通过比较蛇头的坐标block_x[0]和block_y[0]与屏幕的边界
-及边框宽度来确定蛇是否撞墙。如果蛇头的坐标超出了屏幕的
-边界（减去或加上边框宽度和蛇身宽度BLOCK_W），则hit_w
-会被设置为1，表示发生了撞墙事件。如果没有超出，则hit_w
-保持为0，表示蛇没有撞墙
-*/
-always @(posedge vga_clk or negedge sys_rst_n) begin         
-    if (!sys_rst_n) begin
-        hit_w <= 0; // 将撞墙信号hit_w初始化为0，表示蛇没有撞墙
-    end
-    else begin
-
-		// 如果蛇头的x坐标小于屏幕左边界加上边框宽度
-        if(block_x[0] < SIDE_W - 1'b1)
-            hit_w <= 1'b1; // 表示蛇撞到了左边界    
-
-		// 如果蛇头的x坐标大于屏幕右边界减去边框宽度和蛇身宽度
-        else if(block_x[0] > H_DISP - SIDE_W - BLOCK_W)
-            hit_w <= 1'b1; // 表示蛇撞到了右边界
-
-		// 如果蛇头的y坐标小于屏幕上边界加上边框宽度
-        else if(block_y[0] < SIDE_W - 1'b1)
-            hit_w <= 1'b1;// 表示蛇撞到了上边界   
-
-		// 如果蛇头的y坐标大于屏幕下边界减去边框宽度和蛇身宽度            
-        else if(block_y[0] > V_DISP - SIDE_W - BLOCK_W)
-            hit_w <= 1'b1; // 表示蛇撞到了下边界 
-
-        else
-            hit_w <= 1'b0;// 如果以上条件都不满足，表示蛇没有撞墙
     end
 end
 

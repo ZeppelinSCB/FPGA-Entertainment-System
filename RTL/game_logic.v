@@ -19,8 +19,9 @@ module game_logic(
     output reg [ 9:0]     food_y        ,
     output reg [14:0]     snake_x[20:0] ,
     output reg [14:0]     snake_y[20:0] ,
+    output reg [12:0]     snake_cur_len,
     output reg [19:0]     score         //Scire
-)
+);
 
 
 parameter MAX_LEN = 14;          // Maximum length of the snake
@@ -34,13 +35,10 @@ parameter  STATE_UP    = 3'b011;
 parameter  STATE_DIE   = 3'b100;
 parameter  STATE_START = 3'b101;
 
-ir code 
 parameter  TURN_LEFT   = 8'h44;
 parameter  TURN_RIGHT  = 8'h43;
 parameter  TURN_UP     = 8'h46;
 parameter  TURN_DOWN   = 8'h15;
-
-reg [12:0] cur_len;                       //蛇的当前长度
 
 //snake direction state
 reg [ 2:0] cur_state;//当前状态 现态
@@ -425,23 +423,57 @@ end
 //蛇的长度
 always @(posedge vga_clk or negedge sys_rst_n) begin
     if(!sys_rst_n) begin
-	    cur_len  <= 1'b1;
+	    snake_cur_len  <= 1'b1;
 		// beep_clk <= 1'b0;
 	end
 	else begin
 		if(pos_eated) begin
-			cur_len  <= cur_len + 1'b1;
+			snake_cur_len  <= snake_cur_len + 1'b1;
 		    // beep_clk <= 1'b1;
 		end
 		else
 		if(die) begin
-			cur_len  <= 1'b1;
+			snake_cur_len  <= 1'b1;
 			// beep_clk <= 1'b1;
 		end
 		else
-		    cur_len  <= cur_len;
+		    snake_cur_len  <= snake_cur_len;
 			// beep_clk <= 1'b0;
 	end
 end
 
+//判断蛇是否撞墙
+/*
+通过比较蛇头的坐标block_x[0]和block_y[0]与屏幕的边界
+及边框宽度来确定蛇是否撞墙。如果蛇头的坐标超出了屏幕的
+边界（减去或加上边框宽度和蛇身宽度BLOCK_W），则hit_w
+会被设置为1，表示发生了撞墙事件。如果没有超出，则hit_w
+保持为0，表示蛇没有撞墙
+*/
+always @(posedge vga_clk or negedge sys_rst_n) begin         
+    if (!sys_rst_n) begin
+        hit_w <= 0; // 将撞墙信号hit_w初始化为0，表示蛇没有撞墙
+    end
+    else begin
+
+		// 如果蛇头的x坐标小于屏幕左边界加上边框宽度
+        if(block_x[0] < SIDE_W - 1'b1)
+            hit_w <= 1'b1; // 表示蛇撞到了左边界    
+
+		// 如果蛇头的x坐标大于屏幕右边界减去边框宽度和蛇身宽度
+        else if(block_x[0] > H_DISP - SIDE_W - BLOCK_W)
+            hit_w <= 1'b1; // 表示蛇撞到了右边界
+
+		// 如果蛇头的y坐标小于屏幕上边界加上边框宽度
+        else if(block_y[0] < SIDE_W - 1'b1)
+            hit_w <= 1'b1;// 表示蛇撞到了上边界   
+
+		// 如果蛇头的y坐标大于屏幕下边界减去边框宽度和蛇身宽度            
+        else if(block_y[0] > V_DISP - SIDE_W - BLOCK_W)
+            hit_w <= 1'b1; // 表示蛇撞到了下边界 
+
+        else
+            hit_w <= 1'b0;// 如果以上条件都不满足，表示蛇没有撞墙
+    end
+end
 endmodule

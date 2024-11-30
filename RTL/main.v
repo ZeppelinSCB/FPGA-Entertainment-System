@@ -24,7 +24,7 @@ module main(
 	output [ 5:0]     seg_sel              ,
     output [ 7:0]     seg_led              ,
     //Buzzer
-    output            beep_en             ,
+    output            beep_en             
 );
 
 	wire        		 vga_clk_w		; //25Mhz Clock
@@ -63,8 +63,9 @@ module main(
 	wire                beep_en_eat     ;
 
     wire [9:0]          food_coord [1:0];
-    wire [14:0]         snake_x[20:0] ,
-    wire [14:0]         snake_y[20:0] ,
+    wire [14:0]         snake_x[20:0];
+    wire [14:0]         snake_y[20:0];
+    wire [12:0]         snake_cur_len;
 
 
 
@@ -124,6 +125,7 @@ game_logic game_logic_inst(
     .food_y        (food_coord[1]),
     .snake_x       (snake_x),
     .snake_y       (snake_y),
+    .snake_cur_len (snake_cur_len),
     .score         (seg_score)
 );
 
@@ -133,10 +135,11 @@ pixel_renderer renderer_inst(
     .sys_rst_n      (rst_n_w),
     .pixel_xpos     (pixel_xpos_w),
     .pixel_ypos     (pixel_ypos_w),
-    .food_x         (food_coord[0]),、
+    .food_x         (food_coord[0]),
     .food_y         (food_coord[1]),
     .snake_x        (snake_x),
     .snake_y        (snake_y),
+    .snake_cur_len  (snake_cur_len),
     //out
     .pixel_data     (pixel_data_w)
 );
