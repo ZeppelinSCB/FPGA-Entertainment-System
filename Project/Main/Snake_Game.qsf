@@ -60,7 +60,3 @@ set_global_assignment -name EDA_GENERATE_FUNCTIONAL_NETLIST OFF -section_id eda_
 set_global_assignment -name EDA_GENERATE_FUNCTIONAL_NETLIST OFF -section_id eda_board_design_boundary_scan
 set_global_assignment -name POWER_PRESET_COOLING_SOLUTION "23 MM HEAT SINK WITH 200 LFPM AIRFLOW"
 set_global_assignment -name POWER_BOARD_THERMAL_MODEL "NONE (CONSERVATIVE)"
-set_global_assignment -name VERILOG_FILE ../RTL/key_filter.v
-set_global_assignment -name VERILOG_FILE ../RTL/par_to_ser.v
-set_global_assignment -name VERILOG_FILE ../RTL/hdmi_ctrl.v
-set_global_assignment -name VERILOG_FILE ../RTL/encode.v
