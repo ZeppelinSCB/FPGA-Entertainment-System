@@ -101,10 +101,20 @@ module game_logic (
 						is_cur_coord_tail = 1'b1;
 					end
 
-					if (tails[i] == {snake_head_x, snake_head_y})
+					if (tails[i] == {snake_head_x, snake_head_y})//Snake collides with itself
 					begin
 						game_over = 1'b1;
 					end
+					else if ((snake_head_y <= 16)||(snake_head_y >= 479))//Snake collides with the wall
+        			begin
+						game_over = 1'b1;
+					end
+					else if ((snake_head_x <= 16)||(snake_head_x >= 623))//Snake collides with the wall
+					begin
+						game_over = 1'b1;
+					end
+					else
+						game_over <= 1'b0;
 				end
 			end
 		end
@@ -217,6 +227,12 @@ module game_logic (
 		begin
 			game_won <= 1;
 		end
+		else if (time_max_flag == 1'b1)
+		begin
+			game_won <= 1;
+		end
+		else
+			game_won <= 0;
 	end
 
 endmodule
