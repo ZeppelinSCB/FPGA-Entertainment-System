@@ -1,3 +1,5 @@
+`include "../libs/define.vh"
+
 module border
 (
     vga_clk     ,
