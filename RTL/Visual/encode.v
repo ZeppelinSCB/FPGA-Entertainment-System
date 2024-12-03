@@ -14,10 +14,11 @@ output reg [9:0] data_out //output 10bit encoded data
 //\* Parameter and Internal Signal \//
 ////
 //parameter define
-parameter DATA_OUT0 = 10'b1101010100,
-DATA_OUT1 = 10'b0010101011,
-DATA_OUT2 = 10'b0101010100,
-DATA_OUT3 = 10'b1010101011;
+parameter 
+    DATA_OUT0 = 10'b1101010100,
+    DATA_OUT1 = 10'b0010101011,
+    DATA_OUT2 = 10'b0101010100,
+    DATA_OUT3 = 10'b1010101011;
 
 //wire define
 wire condition_1 ; //condition 1

@@ -1,14 +1,14 @@
 module hdmi_ctrl
 (
-input wire clk_1x , //input system clock
-input wire clk_5x , //input 5x system clock
-input wire sys_rst_n , //reset
-input wire [7:0] rgb_blue , //blue
-input wire [7:0] rgb_green , //green
-input wire [7:0] rgb_red , //red
-input wire hsync , //horizontal sync
-input wire vsync , //vertical sync
-input wire de , //enable signal
+input  wire clk_1x , //input system clock
+input  wire clk_5x , //input 5x system clock
+input  wire sys_rst_n , //reset
+input  wire [7:0] rgb_blue , //blue
+input  wire [7:0] rgb_green , //green
+input  wire [7:0] rgb_red , //red
+input  wire hsync , //horizontal sync
+input  wire vsync , //vertical sync
+input  wire de , //enable signal
 
 output wire hdmi_clk_p ,
 output wire hdmi_clk_n , //clock differential signal

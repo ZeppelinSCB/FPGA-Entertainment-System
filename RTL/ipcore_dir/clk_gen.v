@@ -44,11 +44,11 @@ module clk_gen (
 	c1,
 	locked);
 
-	input	  areset;
-	input	  inclk0;
-	output	  c0;
-	output	  c1;
-	output	  locked;
+	input	  areset ;
+	input	  inclk0 ;
+	output	  c0     ;
+	output	  c1     ;
+	output	  locked ;
 `ifndef ALTERA_RESERVED_QIS
 // synopsys translate_off
 `endif
