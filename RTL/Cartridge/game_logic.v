@@ -105,11 +105,11 @@ module game_logic (
 					begin
 						game_over = 1'b1;
 					end
-					else if ((snake_head_y <= 16)||(snake_head_y >= 479))//Snake collides with the wall
+					else if ((snake_head_y <= 32)||(snake_head_y >= 447))//Snake collides with the wall
         			begin
 						game_over = 1'b1;
 					end
-					else if ((snake_head_x <= 16)||(snake_head_x >= 623))//Snake collides with the wall
+					else if ((snake_head_x <= 32)||(snake_head_x >= 607))//Snake collides with the wall
 					begin
 						game_over = 1'b1;
 					end
