@@ -114,7 +114,7 @@ module game_logic (
 						game_over = 1'b1;
 					end
 					else
-						game_over <= 1'b0;
+						game_over = 1'b0;
 				end
 			end
 		end
