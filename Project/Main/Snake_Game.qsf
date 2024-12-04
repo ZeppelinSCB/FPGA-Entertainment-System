@@ -68,10 +68,7 @@ set_location_assignment PIN_N15 -to tmds_data_p[0]
 set_location_assignment PIN_K16 -to tmds_data_n[2]
 set_location_assignment PIN_L16 -to tmds_data_n[1]
 set_location_assignment PIN_N16 -to tmds_data_n[0]
-set_location_assignment PIN_E1 -to sys_clk
 set_location_assignment PIN_M15 -to reset
-set_location_assignment PIN_P16 -to HDMI_CLK_N
-set_location_assignment PIN_R16 -to HDMI_CLK_P
 set_global_assignment -name VERILOG_FILE ../../RTL/game_time.v
 set_global_assignment -name VERILOG_FILE ../../RTL/Visual/par_to_ser.v
 set_global_assignment -name VERILOG_FILE ../../RTL/main.v

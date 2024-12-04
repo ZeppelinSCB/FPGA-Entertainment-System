@@ -16,6 +16,7 @@ module game_logic (
 	reg `COORD_SIZE tails [0:`LAST_TAIL_ADDR];
 	wire [5:0] rand_num_x_orig, rand_num_y_orig,
 		rand_num_x_fit, rand_num_y_fit;
+    wire flag_time_max;//indicates that the time is over
 
 	random_num_gen_63 rng_x (
 		.clk(update_clk),
@@ -81,20 +82,15 @@ module game_logic (
 
 	// traverse the array of tails and see if
 	// the current coordinate is a tail
-	always @(posedge vga_clk or posedge reset)
-	begin
-		if (reset)
-		begin
+	always @(posedge vga_clk or posedge reset) begin
+		if (reset) begin
 			game_over = 0;
 		end
-		else
-		begin
+		else begin
 			is_cur_coord_tail = 1'b0;
 
-			for (i = 0; i < `MAX_TAILS; i = i + 1)
-			begin
-				if (i < tail_count)
-				begin
+			for (i = 0; i < `MAX_TAILS; i = i + 1) begin
+				if (i < tail_count) begin
 					if (tails[i] == {cur_x, cur_y})
 					begin
 						is_cur_coord_tail = 1'b1;
@@ -113,7 +109,7 @@ module game_logic (
 						game_over = 1'b1;
 					end
 					else
-						game_over <= 1'b0;
+						game_over = 1'b0;
 				end
 			end
 		end
@@ -225,7 +221,7 @@ module game_logic (
 		begin
 			game_won <= 1;
 		end
-		else if (time_max_flag == 1'b1)
+		else if (flag_time_max == 1'b1)
 		begin
 			game_won <= 1;
 		end

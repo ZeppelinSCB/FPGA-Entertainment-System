@@ -28,6 +28,8 @@ wire [15:0]  dB                 ;
 wire	[9:0]	mVGA_X;
 wire	[9:0]	mVGA_Y;
 
+wire [1:0]      entity;
+
 initial
 	begin
     sys_clk   = 1;
@@ -44,6 +46,7 @@ assign dB = main_inst.vga_draw_inst.oBlue   ;
 assign mVGA_X = main_inst.mVGA_X;
 assign mVGA_Y = main_inst.mVGA_Y;
 assign clk_5x = main_inst.vga5x_clk;
+assign entity = main_inst.cur_ent_code;
 
 main main_inst(
     .res_x_one        (res_x_one       ),
