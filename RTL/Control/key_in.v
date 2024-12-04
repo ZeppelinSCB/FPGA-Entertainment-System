@@ -2,20 +2,20 @@
 
 module key_in
 (
-    key_up, 
-    key_down, 
-    key_left, 
-    key_right, 
-    clk,
+    key_up          , 
+    key_down        , 
+    key_left        , 
+    key_right       , 
+    clk             ,
     direction
 
 );
 
-input key_up;
-input key_down;
-input key_left;
-input key_right;
-input clk;
+input key_up        ;
+input key_down      ;
+input key_left      ;
+input key_right     ;
+input clk           ;
 
 output reg [0:1] direction;
 

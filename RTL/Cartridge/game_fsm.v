@@ -72,6 +72,4 @@ always@(posedge vga_clk or negedge sys_rst_n)//state machine to decide what to d
             end
         default: state <= GAME_START;
     endcase
-
-always@(posedge vga_clk or negedge sys_rst_n)//state detail
 endmodule
