@@ -16,11 +16,11 @@
 
 FUNCTION ddio_out 
 (
-	datain_h[7..0],
-	datain_l[7..0],
+	datain_h[0..0],
+	datain_l[0..0],
 	outclock
 )
 
 RETURNS (
-	dataout[7..0]
+	dataout[0..0]
 );

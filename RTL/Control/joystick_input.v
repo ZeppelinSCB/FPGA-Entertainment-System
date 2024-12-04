@@ -34,7 +34,7 @@ begin
 	if(left + right + up + down == 3'b001) // if only one pressed 
 
 	begin 
-
+        /*
 		if(left && (direction != `RIGHT_DIR)) 
 
 		begin 
@@ -64,7 +64,8 @@ begin
 		begin 
 			direction = `DOWN_DIR; 
 		end 
-
+        */
+        direction = `TOP_DIR;
 	end 
 
 end 

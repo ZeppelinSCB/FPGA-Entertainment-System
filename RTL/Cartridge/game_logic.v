@@ -31,6 +31,7 @@ module game_logic (
 
 	assign rand_num_x_fit = rand_num_x_orig % `LAST_HOR_ADDR;
 	assign rand_num_y_fit = rand_num_y_orig % `LAST_VER_ADDR;
+    integer i, j;
 
 	task init();
 	begin
@@ -82,8 +83,6 @@ module game_logic (
 	// the current coordinate is a tail
 	always @(posedge vga_clk or posedge reset)
 	begin
-		integer i;
-
 		if (reset)
 		begin
 			game_over = 0;
@@ -169,7 +168,6 @@ module game_logic (
 	// update tails
 	always @(posedge update_clk or posedge reset)
 	begin
-		integer i;
 
 		if (reset)
 		begin
@@ -197,18 +195,18 @@ module game_logic (
 			else
 			begin
 				// swap coordinates of adjacent tails
-				for (i = 0; i < `MAX_TAILS; i = i + 1)
+				for (j = 0; j < `MAX_TAILS; j = j + 1)
 				begin
-					if (i == (tail_count - 1))
+					if (j == (tail_count - 1))
 					begin
-						tails[i] <= {snake_head_x, snake_head_y};
+						tails[j] <= {snake_head_x, snake_head_y};
 					end
 					else
 					begin
-						if (i != `LAST_TAIL_ADDR) // won't compile without this,
+						if (j != `LAST_TAIL_ADDR) // won't compile without this,
 							// however, in reality this condition will always be true
 						begin
-							tails[i] <= tails[i + 1];
+							tails[j] <= tails[j + 1];
 						end
 					end
 				end

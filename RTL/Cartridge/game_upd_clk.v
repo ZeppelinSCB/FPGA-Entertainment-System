@@ -1,7 +1,7 @@
 `include "../libs/define.vh"
 
 module game_upd_clk (
-	input wire in_clk, reset,
+	input wire in_clk, sys_reset_n,
 	input [9:0] x_in,
 	input [9:0] y_in,
 	output reg out_clk
@@ -41,9 +41,9 @@ module game_upd_clk (
 	end
 
 	// calculate number of times screen was fully drawn
-	always @(posedge in_clk or posedge reset)
+	always @(posedge in_clk or negedge sys_reset_n)
 	begin
-		if (reset)
+		if (!sys_reset_n)
 		begin
 			drawing_cycles_passed <= 0;
 		end
