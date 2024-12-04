@@ -9,8 +9,8 @@ module number
 );
 
 input   [3:0]   number_i     ;//number input
-input   [3:0]   number_x     ;//x coordinate of pixel with respect to number
-input   [3:0]   number_y     ;//y coordinate of pixel with respect to number
+input   [2:0]   number_x     ;//x coordinate of pixel with respect to number
+input   [2:0]   number_y     ;//y coordinate of pixel with respect to number
 
 output  [0:0]   number_o     ;//number output
 

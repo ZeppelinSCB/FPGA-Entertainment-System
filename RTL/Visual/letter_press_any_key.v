@@ -31,7 +31,7 @@ assign          letter_press[15] <= {8'b00000000, 8'b00000000, 8'b00000000, 8'b0
 
 always@(*)
 begin
-    letter_press_o = letter[letter_y][letter_x];
+    letter_press_o = letter_press[letter_y][letter_x];
 end
 
 endmodule
