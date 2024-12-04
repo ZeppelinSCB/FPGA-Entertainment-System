@@ -3,25 +3,75 @@
 module fsm (
     vga_clk             ,
     sys_rst_n           ,
-	one_resistor_x      ,
-    two_resistors_x     ,
-    one_resistor_y      ,
-    two_resistors_y     ,
+    key_up              , 
+    key_down            , 
+    key_left            , 
+    key_right           ,
+    key_press           ,
+    game_won            ,
+    game_over           ,
     state
 );
 
 input vga_clk        ;
 input sys_rst_n      ;
-input one_resistor_x ;
-input two_resistors_x;
-input one_resistor_y ;
-input two_resistors_y;
+input key_up         ;
+input key_down       ;
+input key_left       ;
+input key_right      ;
 
-parameter KEY_PRESS = 1'b1;
-parameter GAME_START = 3'b000;
-parameter DIFF_SEL = 3'b001;
-parameter GAME_END = 3'b011;
+parameter GAME_START = 2'b00;
+parameter IN_GAME = 2'b01;
+parameter GAME_WON = 2'b11;
+parameter GAME_OVER = 2'b10;
 
-reg [2:0] state;
+reg [0:0] key_press;
+reg [1:0] state;//Using Grey-Code to represent
 
+
+always@(*)//detect key input
+    if(key_up==1 || key_down==1 || key_left==1 || key_down==1) begin
+        key_press = 1;
+    end
+
+
+always@(posedge vga_clk or negedge sys_rst_n)//state machine to decide what to do next
+    if(sys_rst_n == 1'b0)
+	    state <= GAME_START; 
+    else case(state)
+        GAME_START:
+            if(key_press==1) begin
+                state <= IN_GAME;
+            end
+            else begin
+                state <= GAME_START;
+            end
+        IN_GAME:
+            if(game_won==1) begin
+                state <= GAME_WON;
+            end
+            else if(game_over==1) begin
+                state <= GAME_OVER;
+            end
+            else begin
+                state <= IN_GAME;
+            end
+        GAME_WON:
+            if(key_press==1) begin
+                state <= GAME_START;
+            end
+            else begin
+                state <= GAME_WON;
+            end
+        GAME_OVER:
+            if(key_press==1) begin
+                state <= GAME_START;
+            end
+            else begin
+                state <= GAME_WON;
+            end
+        default: state <= GAME_START;
+    endcase
+
+always@(posedge vga_clk or negedge sys_rst_n)//state detail
 endmodule
