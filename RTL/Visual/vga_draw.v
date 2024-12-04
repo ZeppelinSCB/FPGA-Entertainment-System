@@ -2,24 +2,31 @@
 `include "../libs/sprites.vh"
 
 module	vga_draw	(	//	Read Out Side
-						oRGB     ,
-						iVGA_X   ,
-						iVGA_Y   ,
-						iVGA_CLK ,
+						iVGA_CLK    ,
+                        ovga_x       ,
+                        ovga_y       ,
 						//	Control Signals
-						reset    ,
-						iColor_SW,
-						ent      
+						sys_reset_n ,
+						iColor_SW   ,
+						ent         ,  
+                        //  VGA port
+                        vga_rgb     ,
+                        vga_hsync   ,
+                        vga_vsync   ,
+                        vga_valid
                     );
 //	Read Out Side
-output [15:0] 	    oRGB;
-input	[9:0]		iVGA_X;
-input	[9:0]		iVGA_Y;
+output  wire [9:0]		ovga_x;
+output  wire [9:0]		ovga_y;
 input				iVGA_CLK;
 //	Control Signals
-input				reset;
+input				sys_reset_n;
 input				iColor_SW; // drawing mode: either game or colored lines
 input	[0:1]		ent; // entity to draw
+output  wire [15:0]      vga_rgb;
+output  wire             vga_hsync;
+output  wire             vga_vsync;
+output  wire             vga_valid;
 
 // Array of sprites
 /*
@@ -37,6 +44,7 @@ reg[4:0] hBlue;
 reg      oRed;
 reg      oGreen;
 reg      oBlue;
+wire[15:0] oRGB;
 
 initial
 begin
@@ -63,9 +71,10 @@ end
 
 assign oRGB = {hRed,hGreen,hBlue};
 
-always @(posedge iVGA_CLK or posedge reset)
+
+always @(posedge iVGA_CLK or negedge sys_reset_n)
 begin
-	if(reset) begin
+	if(!sys_reset_n) begin
 		oRed   <= 0;
 		oGreen <= 0;
 		oBlue  <= 0;
@@ -80,43 +89,43 @@ begin
 	    	    end
 	    	else begin
 	    		// Drawing a particular pixel from  sprite
-	    		oRed <= sp[ent][iVGA_X % `H_SQUARE] [iVGA_Y % `V_SQUARE][0];
-	    		oGreen <= sp[ent][iVGA_X %  `H_SQUARE][iVGA_Y % `V_SQUARE][1];
-	    		oBlue <= sp[ent][iVGA_X % `H_SQUARE]    [iVGA_Y % `V_SQUARE][2];
+	    		oRed   <= sp[ent][ovga_x % `H_SQUARE] [ovga_y % `V_SQUARE][0];
+	    		oGreen <= sp[ent][ovga_x % `H_SQUARE] [ovga_y % `V_SQUARE][1];
+	    		oBlue  <= sp[ent][ovga_x % `H_SQUARE] [ovga_y % `V_SQUARE][2];
 	    	    end
 	        end
 	    else begin //Draw lines of every color that can  be produces
-	    	if (iVGA_Y < 60) begin
+	    	if (ovga_x < 60) begin
 	    		oRed <= 1;
 	    		oGreen <= 1;
 	    		oBlue <= 1;
 	    	    end 
-            else if (iVGA_Y < 120) begin
+            else if (ovga_x < 120) begin
 	    		oRed <= 1;
 	    		oGreen <= 0;
 	    		oBlue <= 1;
 	    	    end  
-            else if (iVGA_Y < 180) begin
+            else if (ovga_x < 180) begin
 	    		oRed <= 1;
 	    		oGreen <= 1;
 	    		oBlue <= 0;
 	    	    end  
-            else if (iVGA_Y < 240) begin
+            else if (ovga_x < 240) begin
 	    		oRed <= 1;
 	    		oGreen <= 0;
 	    		oBlue <= 0;
 	    	    end
-            else if (iVGA_Y < 300) begin
+            else if (ovga_x < 300) begin
 	    		oRed <= 0;
 	    		oGreen <= 1;
 	    		oBlue <= 1;
 	    	    end
-            else if (iVGA_Y < 360) begin
+            else if (ovga_x < 360) begin
 	    		oRed <= 0;
 	    		oGreen <= 0;
 	    		oBlue <= 1;
 	    	    end
-            else if (iVGA_Y < 420) begin
+            else if (ovga_x < 420) begin
 	    		oRed <= 0;
 	    		oGreen <= 1;
 	    		oBlue <= 0;
@@ -129,5 +138,17 @@ begin
             end
 	    end
 end
+
+vga_ctrl vga_ctrl_inst(
+    .vga_clk     (iVGA_CLK),
+    .sys_rst_n   (sys_reset_n),
+    .pix_data    (oRGB),
+    .pix_x       (ovga_x),
+    .pix_y       (ovga_y),
+    .hsync       (vga_hsync),
+    .vsync       (vga_vsync),
+    .rgb         (vga_rgb),
+    .rgb_valid   (vga_valid)
+);
 
 endmodule
