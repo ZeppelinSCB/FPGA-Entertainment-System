@@ -4,6 +4,7 @@ module game_logic (
 	input vga_clk, update_clk, reset,
 	input [0:1] direction,
 	input wire [9:0] x_in, y_in, // new values are given at each clock cycle
+	input wire time_max_flag,//signal of value of time max
 	output reg [0:1] entity,
 	output reg game_over, game_won,
 	output reg `TAIL_SIZE tail_count

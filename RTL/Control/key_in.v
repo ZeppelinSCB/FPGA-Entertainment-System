@@ -19,12 +19,15 @@ input key_down      ;
 input key_left      ;
 input key_right     ;
 input clk           ;
+input sys_clk       ;
+input sys_rst_n     ;
 
 output reg [0:1] direction;
 output reg key_flag;
 
 reg left, right, up, down;
 reg key_press;
+reg [19:0] cnt_20ms ;
 
 parameter CNT_MAX = 20'd999_999;//The maximum counter number
 
