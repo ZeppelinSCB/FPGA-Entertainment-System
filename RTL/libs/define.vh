@@ -9,10 +9,13 @@
 `define DOWN_DIR 2'b10
 
 // entities
-`define ENT_NOTHING 2'b11
-`define ENT_SNAKE_HEAD 2'b01
-`define ENT_SNAKE_TAIL 2'b10
-`define ENT_APPLE 2'b00
+`define ENT_NOTHING             4'b1111
+`define ENT_SNAKE_TAIL          4'b0001
+`define ENT_SNAKE_HEAD_UP       4'b0100
+`define ENT_SNAKE_HEAD_DOWN     4'b0101
+`define ENT_SNAKE_HEAD_LEFT     4'b0110
+`define ENT_SNAKE_HEAD_RGHT     4'b0111
+`define ENT_APPLE               4'b1000
 
 // constants for output and game grid
 `define VGA_WIDTH 640
@@ -25,8 +28,10 @@
 
 `define DRAWING_CYCLES_TO_WAIT 3'd3
 
-`define SPRITE_CNT 3
-`define SPRITE_MSB `SPRITE_CNT - 1
+`define SPRITE_CNT 16    //supported number of sprites
+`define SPRITE_WIDTH 4   //number of bits to represent sprite
+`define SPRITE_MSB (3 - 1 ) // width of pixel
+`define SPRITE_LADDR (`SPRITE_CNT - 1 )
 
 `define GRID_WIDTH (`VGA_WIDTH/`H_SQUARE)
 `define GRID_HEIGHT (`VGA_HEIGHT/`V_SQUARE)

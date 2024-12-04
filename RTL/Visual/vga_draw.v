@@ -22,7 +22,7 @@ input				iVGA_CLK;
 //	Control Signals
 input				sys_reset_n;
 input				iColor_SW; // drawing mode: either game or colored lines
-input	[0:1]		ent; // entity to draw
+input	[0:`SPRITE_LADDR]		ent; // entity to draw
 output  wire [15:0]      vga_rgb;
 output  wire             vga_hsync;
 output  wire             vga_vsync;
@@ -30,13 +30,11 @@ output  wire             vga_valid;
 
 // Array of sprites
 /*
-0 - apple
-1 - snake head
-2 - snake tail
+reference to define.vh
 
 Every sprite consists of 3 bits - RGB values of a particular pixel
 */
-reg [0:`SPRITE_MSB] sp [0:2][0:`H_SQUARE_LAST_ADDR][0:`V_SQUARE_LAST_ADDR];
+reg [0:`SPRITE_MSB] sp [`SPRITE_LADDR:0][0:`H_SQUARE_LAST_ADDR][0:`V_SQUARE_LAST_ADDR];
 
 reg[4:0] hRed;
 reg[5:0] hGreen;

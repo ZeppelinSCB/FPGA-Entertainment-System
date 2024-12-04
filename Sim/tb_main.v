@@ -6,7 +6,8 @@ reg          res_y_one          ;
 reg          res_y_two          ;
 reg          sys_clk            ; // 50MHz
 reg          sys_rst            ;
-reg          iColor_SW          ; // swap between 2 outputs
+reg          iColor_SW          ; //when set to 1, display color bar
+reg          debug_mode         ; //when set to 1, display all the sprites
 
 wire         clk_5x             ;
 wire         VGA_HS             ;// VGA H_SYNC
@@ -28,7 +29,7 @@ wire [15:0]  dB                 ;
 wire	[9:0]	mVGA_X;
 wire	[9:0]	mVGA_Y;
 
-wire [1:0]      entity;
+wire [3:0]      entity;
 
 initial
 	begin

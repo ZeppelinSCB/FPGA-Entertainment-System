@@ -40,6 +40,8 @@ module main (
 
 	output wire [0:1] dir_out           // for debug
 );
+    parameter COLOR_DEBUG = 1'b0;
+    parameter GAME_DEBUG  = 1'b0;
 	// Clock
     wire reset_p;// This reset is enable at high
 	wire vga_clk, update_clk, vga5x_clk;
@@ -70,7 +72,7 @@ module main (
 	assign dir_out = dir; // for debug
 
 	// Game logic
-	wire [0:1] cur_ent_code;
+	wire [0:`SPRITE_LADDR] cur_ent_code;
 	wire `TAIL_SIZE game_score;
 
 	clk_gen vga_clk_gen (
@@ -99,6 +101,7 @@ module main (
 	);
 
 	game_logic game_logic_module (
+        .debug_mode(GAME_DEBUG),
 		.vga_clk(vga_clk),
 		.update_clk(update_clk),
 		.reset(reset_p),
@@ -117,7 +120,7 @@ module main (
             .ovga_y(mVGA_Y),
 			//	Control Signals
 			.sys_reset_n(sys_reset_n),
-			.iColor_SW(1'b0),
+			.iColor_SW(COLOR_DEBUG),
 			.ent(cur_ent_code),
             .vga_rgb(sVGA_RGB),
             .vga_hsync(VGA_HS),

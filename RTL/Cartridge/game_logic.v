@@ -4,16 +4,18 @@ module game_logic (
 	input vga_clk, update_clk, reset,
 	input [0:1] direction,
 	input wire [9:0] x_in, y_in, // new values are given at each clock cycle
-	output reg [0:1] entity,
+    input wire debug_mode, //when set to 1, display all the sprites
+	output reg [0:`SPRITE_LADDR] entity,
 	output reg game_over, game_won,
 	output reg `TAIL_SIZE tail_count
 );
-	wire `X_SIZE cur_x;
-	wire `Y_SIZE cur_y;
+	wire `X_SIZE cur_x; //current coordinate using grid as unit
+	wire `Y_SIZE cur_y; //current coordinate using grid as unit
 	reg `X_SIZE snake_head_x, apple_x;
 	reg `Y_SIZE snake_head_y, apple_y;
 	reg is_cur_coord_tail;
 	reg `COORD_SIZE tails [0:`LAST_TAIL_ADDR];
+    wire suqare_x;
 	wire [5:0] rand_num_x_orig, rand_num_y_orig,
 		rand_num_x_fit, rand_num_y_fit;
     wire flag_time_max;//indicates that the time is over
@@ -50,34 +52,50 @@ module game_logic (
 		game_won <= 0;
 	end
 
+    //convert the pixel domain into grid domain
 	assign cur_x = (x_in / `H_SQUARE);
 	assign cur_y = (y_in / `V_SQUARE);
+    assign suqare_x = (x_in % `H_SQUARE);
 
 	// return entity code of the current x & y
-	always @(posedge vga_clk)
-	begin
-		if (
-			cur_x == snake_head_x &&
-			cur_y == snake_head_y
-		)
-		begin
-			entity <= `ENT_SNAKE_HEAD;
-		end
-		else if (
-			cur_x == apple_x &&
-			cur_y == apple_y
-		)
-		begin
-			entity <= `ENT_APPLE;
-		end
-		else if (is_cur_coord_tail)
-		begin
-			entity <= `ENT_SNAKE_TAIL;
-		end
-		else
-		begin
-			entity <= `ENT_NOTHING;
-		end
+	always @(posedge vga_clk) begin
+        //when the debug mode is on, display all the sprites at each line
+        if (debug_mode == 1) begin
+            /*
+            if( cur_x = 0)
+                entity <= `ENT_SNAKE_HEAD_UP;
+            else if (cur_x = 1)
+                entity <= `ENT_SNAKE_TAIL;
+            else if (cur_x = 2)
+                entity <= `ENT_APPLE;
+                */
+            if (cur_x < `SPRITE_LADDR)
+                entity <= cur_x;
+            else
+                entity <= `ENT_NOTHING;
+        end
+        else begin
+		    if (
+		    	cur_x == snake_head_x &&
+		    	cur_y == snake_head_y
+		        )   begin
+		    	    entity <= `ENT_SNAKE_HEAD_UP;
+		            end
+		    else if (
+		    	cur_x == apple_x &&
+		    	cur_y == apple_y
+		        )   begin
+		    	    entity <= `ENT_APPLE;
+		            end
+		    else if (
+                is_cur_coord_tail
+                ) begin
+		    	    entity <= `ENT_SNAKE_TAIL;
+		            end
+		    else  begin
+		    	entity <= `ENT_NOTHING;
+		        end
+        end
 	end
 
 	// traverse the array of tails and see if
@@ -88,7 +106,6 @@ module game_logic (
 		end
 		else begin
 			is_cur_coord_tail = 1'b0;
-
 			for (i = 0; i < `MAX_TAILS; i = i + 1) begin
 				if (i < tail_count) begin
 					if (tails[i] == {cur_x, cur_y})
@@ -111,6 +128,10 @@ module game_logic (
 					else
 						game_over = 1'b0;
 				end
+                else begin
+                    is_cur_coord_tail = 1'b0;
+                    game_over = 1'b0;
+                end
 			end
 		end
 	end
@@ -118,6 +139,7 @@ module game_logic (
 	// move snake head
 	always @(posedge update_clk or posedge reset)
 	begin
+        //if reset, set the snake head to the middle of the screen
 		if (reset)
 		begin
 			snake_head_x <= `GRID_MID_WIDTH;
@@ -165,48 +187,48 @@ module game_logic (
 	always @(posedge update_clk or posedge reset)
 	begin
 
-		if (reset)
-		begin
+		if (reset) begin
 			init();
 			tail_count <= 0;
-		end
-		else
-		begin
+		    end
+		else begin
 			// if (~game_over) // cool animation
-			// begin
+
 			// in case of apple hit
-			if (snake_head_x == apple_x &&
-					snake_head_y == apple_y)
-			begin
+			if (
+                snake_head_x == apple_x &&
+				snake_head_y == apple_y
+                ) begin
 				// add tail to the previous position of the head
 				if (tail_count < `MAX_TAILS) // that is, game is not won
-				begin
+				    begin
 					tails[tail_count] <= {snake_head_x, snake_head_y};
 					tail_count <= tail_count + 1;
-				end
-
+				    end
+                else
+                    tail_count <= tail_count;
+                // generate new apple
 				apple_x <= rand_num_x_fit;
 				apple_y <= rand_num_y_fit;
-			end
-			else
-			begin
+			    end
+            // no apple hit
+			else begin
 				// swap coordinates of adjacent tails
-				for (j = 0; j < `MAX_TAILS; j = j + 1)
-				begin
-					if (j == (tail_count - 1))
-					begin
+				for (j = 0; j < `MAX_TAILS; j = j + 1) begin
+					if (j == (tail_count - 1)) begin
 						tails[j] <= {snake_head_x, snake_head_y};
-					end
-					else
-					begin
-						if (j != `LAST_TAIL_ADDR) // won't compile without this,
+					    end
+					else begin
+						if (j != `LAST_TAIL_ADDR) begin
+                            // won't compile without this,
 							// however, in reality this condition will always be true
-						begin
 							tails[j] <= tails[j + 1];
-						end
-					end
-				end
-			end
+						    end
+                        else
+                            tails[j] <= tails[j];
+					    end
+				    end
+			    end
 			//end
 		end
 	end
