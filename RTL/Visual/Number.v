@@ -5,9 +5,7 @@ module number
     number_y        ,
     scan_x          ,
     number          ,
-    number_o        ,
-    pix_x           ,
-    pix_y
+    number_o        
 );
 
 input   [3:0]   number_i     ;//number input
