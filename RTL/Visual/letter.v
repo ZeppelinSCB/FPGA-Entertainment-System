@@ -3,20 +3,18 @@ module letter
     letter_i        ,
     letter_x        ,
     letter_y        ,
-    letter_letter   ,
     scan_x          ,
     letter          ,
     letter_o        
 );
 
-input   [4:0]   letter_i     ;//letter input
-input   [3:0]   letter_x     ;//x coordinate of pixel with respect to letter
-input   [3:0]   letter_y     ;//y coordinate of pixel with respect to letter
+input wire  [4:0]   letter_i     ;//letter input
+input wire  [3:0]   letter_x     ;//x coordinate of pixel with respect to letter
+input wire  [3:0]   letter_y     ;//y coordinate of pixel with respect to letter
 
-output  [0:0]   letter_o     ;//letter output
+output reg  [0:0]   letter_o     ;//letter output
 
 reg             scan_x       ;
-reg
 
 
 assign          letter_won[ 0] <= {8'b00000000, 8'b00000000, 8'b00000000, 8'b00000000, 8'b00000000, 8'b00000000, 8'b00000000, 8'b00000000, 8'b00000000, 8'b00000000, 8'b00000000, 8'b00000000, 8'b00000000, 8'b00000000, 8'b00000000, 8'b00000000, 8'b00000000, 8'b00000000, 8'b00000000, 8'b00000000, 8'b00000000, 8'b00000000, 8'b00000000, 8'b00000000, 8'b00000000, 8'b00000000, 8'b00000000, 8'b00000000, 8'b00000000, 8'b00000000, 8'b00000000, 8'b00000000, 8'b00000000, 8'b00000000, 8'b00000000, 8'b00000000, 8'b00000000, 8'b00000000, 8'b00000000, 8'b00000000, 8'b00000000, 8'b00000000, 8'b00000000, 8'b00000000, 8'b00000000, 8'b00000000, 8'b00000000, 8'b00000000, 8'b00000000, 8'b00000000, 8'b00000000, 8'b00000000};
@@ -39,7 +37,7 @@ assign          letter_won[15] <= {8'b11111000, 8'b01111110, 8'b11111111, 8'b111
 
 always@(*)
 begin
-    scan_x = letter_x + letter_letter*8*2;//each character has original width of 16 pixels
+    scan_x = letter_x + letter_i*8*2;//each character has original width of 16 pixels
     letter_o = letter[letter_y][scan_x];
 end
 
