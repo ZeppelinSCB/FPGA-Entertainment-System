@@ -7,10 +7,10 @@ module key_in
     key_left        , 
     key_right       ,
     key_flag        , 
-    clk             ,
+    iClk             ,
     sys_clk         ,
     sys_rst_n       ,
-    direction
+    oDirection
 
 );
 
@@ -18,12 +18,12 @@ input wire key_up        ;//key1
 input wire key_down      ;//key2
 input wire key_left      ;//key0
 input wire key_right     ;//key3
-input wire key_flag		;
-input wire clk           ;
+input wire key_flag		 ;
+input wire iClk          ;
 input wire sys_clk       ;
 input wire sys_rst_n     ;
 
-output reg [0:1] direction;
+output reg [0:1] oDirection;
 
 
 reg left, right, up, down;
@@ -35,7 +35,7 @@ parameter CNT_MAX = 20'd999_999;//The maximum counter number
 initial
 
 begin
-    direction = `TOP_DIR;
+    oDirection = `TOP_DIR;
 end
 
 always @(posedge sys_clk or negedge sys_rst_n) begin
@@ -61,7 +61,7 @@ always@(posedge sys_clk or negedge sys_rst_n) begin
 		key_flag <= 1'b0;
 end
 
-always @(posedge clk)
+always @(posedge iClk)
 begin
 
     left = key_left		;//left = two_resistors_x;
@@ -73,39 +73,39 @@ begin
 
 	begin 
 
-		if(left && (direction != `RIGHT_DIR)) 
+		if(left && (oDirection != `RIGHT_DIR)) 
 
 		begin 
-			direction = `LEFT_DIR; 
+			oDirection = `LEFT_DIR; 
 		end 
 
 
 
-		if(right && (direction != `LEFT_DIR)) 
+		if(right && (oDirection != `LEFT_DIR)) 
 
 		begin 
-			direction = `RIGHT_DIR; 
+			oDirection = `RIGHT_DIR; 
 		end 
 
 
 
-		if(up && (direction != `DOWN_DIR)) 
+		if(up && (oDirection != `DOWN_DIR)) 
 
 		begin 
-			direction = `TOP_DIR;
+			oDirection = `TOP_DIR;
 		end 			 
 
 
 
-		if(down && (direction != `TOP_DIR)) 
+		if(down && (oDirection != `TOP_DIR)) 
 
 		begin 
-			direction = `DOWN_DIR; 
+			oDirection = `DOWN_DIR; 
 		end 
 	end
 
     else
-        direction = direction; 
+        oDirection = oDirection; 
 
 end
 
