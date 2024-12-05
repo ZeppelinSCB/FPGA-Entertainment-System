@@ -94,14 +94,14 @@ game_upd_clk upd_clk(
 	.out_clk(update_clk)
 );
 
-	key_in key_input_inst (
-		.key_right(key3),
-		.key_left(key0),
-		.key_down(key2),
-		.key_up(key1),
-		.clk(update_clk),
-		.direction(dir)
-	);
+key_in key_input_inst (
+	.key_right	(key_RGHT),
+	.key_left	(key_LEFT),
+	.key_down	(key_DOWN),
+	.key_up		(key_UUPP),
+    .iClk       (sys_clk ),
+    .oDirection (dir     )
+);
 
 game_logic game_logic_module (
 	.vga_clk(vga_clk),
