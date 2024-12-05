@@ -43,13 +43,13 @@ module ddio_out (
 	outclock,
 	dataout);
 
-	input	[7:0]  datain_h;
-	input	[7:0]  datain_l;
+	input	[0:0]  datain_h;
+	input	[0:0]  datain_l;
 	input	  outclock;
-	output	[7:0]  dataout;
+	output	[0:0]  dataout;
 
-	wire [7:0] sub_wire0;
-	wire [7:0] dataout = sub_wire0[7:0];
+	wire [0:0] sub_wire0;
+	wire [0:0] dataout = sub_wire0[0:0];
 
 	altddio_out	ALTDDIO_OUT_component (
 				.datain_h (datain_h),
@@ -71,7 +71,7 @@ module ddio_out (
 		ALTDDIO_OUT_component.lpm_type = "altddio_out",
 		ALTDDIO_OUT_component.oe_reg = "UNREGISTERED",
 		ALTDDIO_OUT_component.power_up_high = "OFF",
-		ALTDDIO_OUT_component.width = 8;
+		ALTDDIO_OUT_component.width = 1;
 
 
 endmodule
@@ -88,13 +88,13 @@ endmodule
 // Retrieval info: CONSTANT: LPM_TYPE STRING "altddio_out"
 // Retrieval info: CONSTANT: OE_REG STRING "UNREGISTERED"
 // Retrieval info: CONSTANT: POWER_UP_HIGH STRING "OFF"
-// Retrieval info: CONSTANT: WIDTH NUMERIC "8"
-// Retrieval info: USED_PORT: datain_h 0 0 8 0 INPUT NODEFVAL "datain_h[7..0]"
-// Retrieval info: CONNECT: @datain_h 0 0 8 0 datain_h 0 0 8 0
-// Retrieval info: USED_PORT: datain_l 0 0 8 0 INPUT NODEFVAL "datain_l[7..0]"
-// Retrieval info: CONNECT: @datain_l 0 0 8 0 datain_l 0 0 8 0
-// Retrieval info: USED_PORT: dataout 0 0 8 0 OUTPUT NODEFVAL "dataout[7..0]"
-// Retrieval info: CONNECT: dataout 0 0 8 0 @dataout 0 0 8 0
+// Retrieval info: CONSTANT: WIDTH NUMERIC "1"
+// Retrieval info: USED_PORT: datain_h 0 0 1 0 INPUT NODEFVAL "datain_h[0..0]"
+// Retrieval info: CONNECT: @datain_h 0 0 1 0 datain_h 0 0 1 0
+// Retrieval info: USED_PORT: datain_l 0 0 1 0 INPUT NODEFVAL "datain_l[0..0]"
+// Retrieval info: CONNECT: @datain_l 0 0 1 0 datain_l 0 0 1 0
+// Retrieval info: USED_PORT: dataout 0 0 1 0 OUTPUT NODEFVAL "dataout[0..0]"
+// Retrieval info: CONNECT: dataout 0 0 1 0 @dataout 0 0 1 0
 // Retrieval info: USED_PORT: outclock 0 0 0 0 INPUT_CLK_EXT NODEFVAL "outclock"
 // Retrieval info: CONNECT: @outclock 0 0 0 0 outclock 0 0 0 0
 // Retrieval info: GEN_FILE: TYPE_NORMAL ddio_out.v TRUE FALSE

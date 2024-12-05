@@ -17,6 +17,7 @@ module game_logic (
 	reg `COORD_SIZE tails [0:`LAST_TAIL_ADDR];
 	wire [5:0] rand_num_x_orig, rand_num_y_orig,
 		rand_num_x_fit, rand_num_y_fit;
+    wire flag_time_max;//indicates that the time is over
 
 	random_num_gen_63 rng_x (
 		.clk(update_clk),
@@ -32,6 +33,7 @@ module game_logic (
 
 	assign rand_num_x_fit = rand_num_x_orig % `LAST_HOR_ADDR;
 	assign rand_num_y_fit = rand_num_y_orig % `LAST_VER_ADDR;
+    integer i, j;
 
 	task init();
 	begin
@@ -81,22 +83,15 @@ module game_logic (
 
 	// traverse the array of tails and see if
 	// the current coordinate is a tail
-	always @(posedge vga_clk or posedge reset)
-	begin
-		integer i;
-
-		if (reset)
-		begin
+	always @(posedge vga_clk or posedge reset) begin
+		if (reset) begin
 			game_over = 0;
 		end
-		else
-		begin
+		else begin
 			is_cur_coord_tail = 1'b0;
 
-			for (i = 0; i < `MAX_TAILS; i = i + 1)
-			begin
-				if (i < tail_count)
-				begin
+			for (i = 0; i < `MAX_TAILS; i = i + 1) begin
+				if (i < tail_count) begin
 					if (tails[i] == {cur_x, cur_y})
 					begin
 						is_cur_coord_tail = 1'b1;
@@ -170,7 +165,6 @@ module game_logic (
 	// update tails
 	always @(posedge update_clk or posedge reset)
 	begin
-		integer i;
 
 		if (reset)
 		begin
@@ -198,18 +192,18 @@ module game_logic (
 			else
 			begin
 				// swap coordinates of adjacent tails
-				for (i = 0; i < `MAX_TAILS; i = i + 1)
+				for (j = 0; j < `MAX_TAILS; j = j + 1)
 				begin
-					if (i == (tail_count - 1))
+					if (j == (tail_count - 1))
 					begin
-						tails[i] <= {snake_head_x, snake_head_y};
+						tails[j] <= {snake_head_x, snake_head_y};
 					end
 					else
 					begin
-						if (i != `LAST_TAIL_ADDR) // won't compile without this,
+						if (j != `LAST_TAIL_ADDR) // won't compile without this,
 							// however, in reality this condition will always be true
 						begin
-							tails[i] <= tails[i + 1];
+							tails[j] <= tails[j + 1];
 						end
 					end
 				end
@@ -228,7 +222,7 @@ module game_logic (
 		begin
 			game_won <= 1;
 		end
-		else if (time_max_flag == 1'b1)
+		else if (flag_time_max == 1'b1)
 		begin
 			game_won <= 1;
 		end
