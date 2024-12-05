@@ -42,15 +42,18 @@ module main (
 );
 
 parameter
-    VISUAL_DEBUG = 1'b1,
+    VISUAL_DEBUG = 1'b0,
     GAME_DEBUG   = 1'b0;
 
 // Clock
 wire reset_p;// This reset is enable at high
 wire vga_clk, update_clk, vga5x_clk;
 wire clk_locked;
+wire reset_n;
 
-assign reset_p = !sys_reset_n;
+// HDIMI
+assign reset_n = (sys_reset_n & clk_locked);
+assign reset_p = !reset_n;
 assign HDMI_ddc_scl = 1'b1;
 assign HDMI_ddc_sda = 1'b1;
 
@@ -68,10 +71,6 @@ wire [7:0] sVGA_R;
 wire [7:0] sVGA_G;
 wire [7:0] sVGA_B;
 
-assign sVGA_R = {VGA_RGB[15:11], 3'b0};
-assign sVGA_G = {VGA_RGB[10:5], 2'b0};
-assign sVGA_B = {VGA_RGB[4:0], 3'b0};
-
 assign dir_out = dir; // for debug
 
 // Game logic
@@ -79,7 +78,7 @@ wire [0:1] cur_ent_code;
 wire `TAIL_SIZE game_score;
 
 clk_gen vga_clk_gen (
-    .areset(reset_p), 
+    .areset(~sys_reset_n), 
     .inclk0(sys_clk),
     .c0    (vga_clk),
     .c1    (vga5x_clk),
@@ -89,9 +88,9 @@ clk_gen vga_clk_gen (
 // Slow down clock for game
 game_upd_clk upd_clk(
 	.in_clk(vga_clk),
-	.sys_reset_n(sys_reset_n),
-	.x_in(mVGA_X),
-	.y_in(mVGA_Y),
+	.sys_reset_n(reset_n),
+	.x_in(src_coord_X),
+	.y_in(src_coord_Y),
 	.out_clk(update_clk)
 );
 
@@ -110,8 +109,8 @@ game_logic game_logic_module (
 	.update_clk(update_clk),
 	.reset(reset_p),
 	.direction(dir),
-	.x_in(mVGA_X),
-	.y_in(mVGA_Y),
+	.x_in(src_coord_X),
+	.y_in(src_coord_Y),
 	.entity(cur_ent_code),
 	//.game_over(),
 	//.game_won(),
@@ -121,7 +120,7 @@ game_logic game_logic_module (
 // VGA controller that constantly scans the screen
 vga_ctrl vga_ctrl_inst(
     .vga_clk     (vga_clk),
-    .sys_rst_n   (sys_reset_n),
+    .sys_rst_n   (reset_n),
     .pix_data    (draw_RGB),
     .pix_x       (src_coord_X),
     .pix_y       (src_coord_Y),
@@ -136,21 +135,24 @@ vga_draw    vga_draw_inst(
     .iVGA_CLK    (vga_clk),
     .ivga_x      (src_coord_X),
     .ivga_y      (src_coord_Y),
-    .iReset_n    (sys_reset_n),
+    .iReset_n    (reset_n),
     .iColor_SW   (VISUAL_DEBUG),
     .iSprite     (cur_ent_code),
     .oRGB        (draw_RGB)
 );
 
     
-/*
+assign sVGA_R = {VGA_RGB[15:11], 3'b0};
+assign sVGA_G = {VGA_RGB[10:5], 2'b0 };
+assign sVGA_B = {VGA_RGB[4:0], 3'b0  };
+
 hdmi_ctrl hdmi_ctrl_inst(
     .clk_1x     (vga_clk), //input system clock
     .clk_5x     (vga5x_clk), //input 5x system clock
-    .sys_rst_n  (sys_rst_n), //reset
-    .rgb_blue   (sVGA_B),
-    .rgb_green  (sVGA_G),
-    .rgb_red    (sVGA_R),
+    .sys_rst_n  (reset_n), //reset
+    .rgb_blue   ({VGA_RGB[4:0], 3'b0  }),
+    .rgb_green  ({VGA_RGB[10:5], 2'b0 }),
+    .rgb_red    ({VGA_RGB[15:11], 3'b0}),
     .hsync      (VGA_HS), //horizontal sync
     .vsync      (VGA_VS), //vertical sync
     .de         (vga_en), //enable signal
@@ -163,7 +165,7 @@ hdmi_ctrl hdmi_ctrl_inst(
     .hdmi_b_p   (HDMI_tmds_data_p[0]),
     .hdmi_b_n   (HDMI_tmds_data_n[0])
 );
-*/
+
 /*
 SSEG_Display sseg_d(
 	.clk_50M(sys_clk),

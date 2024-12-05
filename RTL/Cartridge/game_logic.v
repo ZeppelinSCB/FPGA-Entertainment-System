@@ -46,7 +46,7 @@ module game_logic (
 		init();
 		snake_head_x <= `GRID_MID_WIDTH;
 		snake_head_y <= `GRID_MID_HEIGHT;
-		tail_count <= 0;
+		tail_count <= 5;
 		game_won <= 0;
 	end
 

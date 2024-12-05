@@ -40,13 +40,14 @@ begin
 end
 
 // selete the signal to output
-always @(*) begin
+always @(iVGA_CLK) begin
     if(iColor_SW == 1'b1)
         oRGB = rgb_background;
-    else if (iSprite != `ENT_NOTHING)
-        oRGB = rgb_sprite;
-    else
+    else if (iSprite == `ENT_NOTHING)
         oRGB = rgb_background;
+        //oRGB = rgb_sprite;
+    else
+        oRGB = rgb_sprite;
 end
 
 // Draw the iSprite
@@ -91,7 +92,8 @@ localparam
 always @(posedge iVGA_CLK) begin
     if(!iColor_SW)
         rgb_background <= 16'hffff;
-    else begin
+    else
+    begin
 	    if      (ivga_x < 60)
             rgb_background <= RED;
         else if (ivga_x < 120)

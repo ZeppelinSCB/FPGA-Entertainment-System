@@ -66,9 +66,9 @@ vga_draw Drawer_inst	(	//	Read Out Side
     .iVGA_CLK    (sys_clk),
     .ivga_x      (VGA_X),
     .ivga_y      (VGA_Y),
-    .sys_reset_n (sys_rst),
+    .iReset_n    (sys_rst),
     .iColor_SW   (iColor_SW),
-    .sprite      (ent),
+    .iSprite      (ent),
     .oRGB        (draw_RGB)
 );
 endmodule
