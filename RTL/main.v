@@ -4,10 +4,10 @@
 module main (
 	// joystick input
 	input wire
-		res_x_one   ,
-		res_x_two   ,
-		res_y_one   ,
-		res_y_two   ,
+		key_UUPP    ,
+		key_DOWN    ,
+		key_LEFT    ,
+		key_RGHT    ,
 
 	input wire 
         sys_clk     , // 50MHz
@@ -94,14 +94,14 @@ game_upd_clk upd_clk(
 	.out_clk(update_clk)
 );
 
-// Joystick input
-joystick_input ji (
-	.one_resistor_x(res_x_one),
-	.two_resistors_x(res_x_two),
-	.one_resistor_y(res_y_one),
-	.two_resistors_y(res_y_two),
-	.clk(update_clk),
-	.direction(dir)
+// Key input
+key_input key_input_inst(
+    .iK_Left    (key_LEFT),
+    .iK_Right   (key_RGHT),
+    .iK_Up      (key_UUPP),
+    .iK_Down    (key_DOWN),
+    .iClk       (sys_clk ),
+    .oDirection (dir     )
 );
 
 game_logic game_logic_module (
