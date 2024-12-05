@@ -54,7 +54,7 @@ always@(posedge vga_clk or negedge sys_rst_n)//Edge of game area
             pix_data = score_colour;
         end
         else if((pix_y<=BORDER_W_TOP)||(pix_y>=BORDER_W_BOTTOM)||(pix_x<=BORDER_W_LEFT)||(pix_x>=BORDER_W_RIGHT))
-            pix_data = 16'h4040;//test
+            pix_data = 16'h4040;//test* in-game should be BLACK(FFFF)
         else begin
             pix_data = BORDER_COLOUR;
         end

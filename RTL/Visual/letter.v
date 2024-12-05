@@ -39,7 +39,7 @@ assign          letter_won[15] <= {8'b11111000, 8'b01111110, 8'b11111111, 8'b111
 
 always@(*)
 begin
-    scan_x = letter_x + letter_letter*8*2;
+    scan_x = letter_x + letter_letter*8*2;//each character has original width of 16 pixels
     letter_o = letter[letter_y][scan_x];
 end
 
