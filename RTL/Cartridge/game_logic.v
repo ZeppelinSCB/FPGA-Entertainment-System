@@ -134,7 +134,7 @@ module game_logic (
                 end
 			end
 		end
-	end
+	    end
 
 	// move snake head
 	always @(posedge update_clk or posedge reset)

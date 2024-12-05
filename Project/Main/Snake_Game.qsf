@@ -59,9 +59,6 @@ set_global_assignment -name EDA_GENERATE_FUNCTIONAL_NETLIST OFF -section_id eda_
 set_global_assignment -name EDA_GENERATE_FUNCTIONAL_NETLIST OFF -section_id eda_board_design_boundary_scan
 set_global_assignment -name POWER_PRESET_COOLING_SOLUTION "23 MM HEAT SINK WITH 200 LFPM AIRFLOW"
 set_global_assignment -name POWER_BOARD_THERMAL_MODEL "NONE (CONSERVATIVE)"
-set_global_assignment -name PARTITION_NETLIST_TYPE SOURCE -section_id Top
-set_global_assignment -name PARTITION_FITTER_PRESERVATION_LEVEL PLACEMENT_AND_ROUTING -section_id Top
-set_global_assignment -name PARTITION_COLOR 16764057 -section_id Top
 set_location_assignment PIN_K15 -to tmds_data_p[2]
 set_location_assignment PIN_L15 -to tmds_data_p[1]
 set_location_assignment PIN_N15 -to tmds_data_p[0]
@@ -69,22 +66,6 @@ set_location_assignment PIN_K16 -to tmds_data_n[2]
 set_location_assignment PIN_L16 -to tmds_data_n[1]
 set_location_assignment PIN_N16 -to tmds_data_n[0]
 set_location_assignment PIN_M15 -to reset
-set_global_assignment -name VERILOG_FILE ../../RTL/game_time.v
-set_global_assignment -name VERILOG_FILE ../../RTL/Visual/par_to_ser.v
-set_global_assignment -name VERILOG_FILE ../../RTL/main.v
-set_global_assignment -name VERILOG_FILE ../../RTL/Visual/vga_draw.v
-set_global_assignment -name VERILOG_FILE ../../RTL/Visual/vga_ctrl.v
-set_global_assignment -name VERILOG_FILE ../../RTL/Visual/hdmi_enc.v
-set_global_assignment -name VERILOG_FILE ../../RTL/Visual/hdmi_ctrl.v
-set_global_assignment -name VERILOG_FILE ../../RTL/Visual/encode.v
-set_global_assignment -name VERILOG_FILE ../../RTL/random/LFSR/LFSR.v
-set_global_assignment -name VERILOG_FILE ../../RTL/random/random_num_gen_63.v
-set_global_assignment -name VERILOG_FILE ../../RTL/Control/key_filter.v
-set_global_assignment -name VERILOG_FILE ../../RTL/Control/joystick_input.v
-set_global_assignment -name VERILOG_FILE ../../RTL/Cartridge/game_upd_clk.v
-set_global_assignment -name VERILOG_FILE ../../RTL/Cartridge/game_logic.v
-set_global_assignment -name QIP_FILE ../../RTL/ipcore_dir/ddio_out.qip
-set_global_assignment -name QIP_FILE ../../RTL/ipcore_dir/clk_gen.qip
 set_location_assignment PIN_E1 -to sys_clk
 set_location_assignment PIN_P16 -to HDMI_CLK_N
 set_location_assignment PIN_R16 -to HDMI_CLK_P
@@ -105,21 +86,43 @@ set_global_assignment -name EDA_TEST_BENCH_RUN_SIM_FOR "10 s" -section_id tb_mai
 set_global_assignment -name EDA_TEST_BENCH_MODULE_NAME tb_main -section_id tb_main
 set_global_assignment -name EDA_TEST_BENCH_FILE ../../Sim/tb_main.v -section_id tb_main
 set_location_assignment PIN_C2 -to VGA_HS
-set_location_assignment PIN_A5 -to VGA_RGB[15]
-set_location_assignment PIN_E6 -to VGA_RGB[14]
-set_location_assignment PIN_E7 -to VGA_RGB[13]
-set_location_assignment PIN_B8 -to VGA_RGB[12]
-set_location_assignment PIN_A8 -to VGA_RGB[11]
-set_location_assignment PIN_F8 -to VGA_RGB[10]
-set_location_assignment PIN_E8 -to VGA_RGB[9]
-set_location_assignment PIN_B7 -to VGA_RGB[8]
-set_location_assignment PIN_A7 -to VGA_RGB[7]
-set_location_assignment PIN_F7 -to VGA_RGB[6]
-set_location_assignment PIN_F6 -to VGA_RGB[5]
-set_location_assignment PIN_B6 -to VGA_RGB[4]
-set_location_assignment PIN_A6 -to VGA_RGB[3]
-set_location_assignment PIN_B5 -to VGA_RGB[2]
-set_location_assignment PIN_A2 -to VGA_RGB[1]
 set_location_assignment PIN_B4 -to VGA_RGB[0]
+set_location_assignment PIN_F8 -to VGA_RGB[10]
+set_location_assignment PIN_A8 -to VGA_RGB[11]
+set_location_assignment PIN_B8 -to VGA_RGB[12]
+set_location_assignment PIN_E7 -to VGA_RGB[13]
+set_location_assignment PIN_E6 -to VGA_RGB[14]
+set_location_assignment PIN_A5 -to VGA_RGB[15]
+set_location_assignment PIN_A2 -to VGA_RGB[1]
+set_location_assignment PIN_B5 -to VGA_RGB[2]
+set_location_assignment PIN_A6 -to VGA_RGB[3]
+set_location_assignment PIN_B6 -to VGA_RGB[4]
+set_location_assignment PIN_F6 -to VGA_RGB[5]
+set_location_assignment PIN_F7 -to VGA_RGB[6]
+set_location_assignment PIN_A7 -to VGA_RGB[7]
+set_location_assignment PIN_B7 -to VGA_RGB[8]
+set_location_assignment PIN_E8 -to VGA_RGB[9]
 set_location_assignment PIN_D1 -to VGA_VS
+set_global_assignment -name PARTITION_NETLIST_TYPE SOURCE -section_id Top
+set_global_assignment -name PARTITION_FITTER_PRESERVATION_LEVEL PLACEMENT_AND_ROUTING -section_id Top
+set_global_assignment -name PARTITION_COLOR 16764057 -section_id Top
+set_global_assignment -name VERILOG_FILE ../../RTL/Visual/rgb_to_565.v
+set_global_assignment -name QIP_FILE ../../RTL/ipcore_dir/clk_gen_test.qip
+set_global_assignment -name VERILOG_FILE ../../RTL/game_time.v
+set_global_assignment -name VERILOG_FILE ../../RTL/Visual/par_to_ser.v
+set_global_assignment -name VERILOG_FILE ../../RTL/main.v
+set_global_assignment -name VERILOG_FILE ../../RTL/Visual/vga_draw.v
+set_global_assignment -name VERILOG_FILE ../../RTL/Visual/vga_ctrl.v
+set_global_assignment -name VERILOG_FILE ../../RTL/Visual/hdmi_enc.v
+set_global_assignment -name VERILOG_FILE ../../RTL/Visual/hdmi_ctrl.v
+set_global_assignment -name VERILOG_FILE ../../RTL/Visual/encode.v
+set_global_assignment -name VERILOG_FILE ../../RTL/random/LFSR/LFSR.v
+set_global_assignment -name VERILOG_FILE ../../RTL/random/random_num_gen_63.v
+set_global_assignment -name VERILOG_FILE ../../RTL/Control/key_filter.v
+set_global_assignment -name VERILOG_FILE ../../RTL/Control/joystick_input.v
+set_global_assignment -name VERILOG_FILE ../../RTL/Cartridge/game_upd_clk.v
+set_global_assignment -name VERILOG_FILE ../../RTL/Cartridge/game_logic.v
+set_global_assignment -name QIP_FILE ../../RTL/ipcore_dir/ddio_out.qip
+set_global_assignment -name QIP_FILE ../../RTL/ipcore_dir/clk_gen.qip
+set_global_assignment -name SOURCE_FILE db/Snake_Game.cmp.rdb
 set_instance_assignment -name PARTITION_HIERARCHY root_partition -to | -section_id Top
