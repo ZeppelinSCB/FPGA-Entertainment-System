@@ -114,7 +114,7 @@ module game_logic (
 				end
 			end
 		end
-	end
+	    end
 
 	// move snake head
 	always @(posedge update_clk or posedge reset)
@@ -163,25 +163,20 @@ module game_logic (
 	end
 
 	// update tails
-	always @(posedge update_clk or posedge reset)
-	begin
-
-		if (reset)
-		begin
+	always @(posedge update_clk or posedge reset) begin
+		if (reset) begin
 			init();
 			tail_count <= 0;
 		end
-		else
-		begin
+		else begin // not reset
 			// if (~game_over) // cool animation
 			// begin
-			// in case of apple hit
-			if (snake_head_x == apple_x &&
+			if (snake_head_x == apple_x && // in case of apple hit
 					snake_head_y == apple_y)
-			begin
+			    begin
 				// add tail to the previous position of the head
-				if (tail_count < `MAX_TAILS) // that is, game is not won
-				begin
+				if (tail_count < `MAX_TAILS) // if game is not won
+				    begin
 					tails[tail_count] <= {snake_head_x, snake_head_y};
 					tail_count <= tail_count + 1;
 				end
@@ -189,28 +184,22 @@ module game_logic (
 				apple_x <= rand_num_x_fit;
 				apple_y <= rand_num_y_fit;
 			end
-			else
-			begin
-				// swap coordinates of adjacent tails
-				for (j = 0; j < `MAX_TAILS; j = j + 1)
-				begin
-					if (j == (tail_count - 1))
-					begin
+			else begin
+				for (j = 0; j < `MAX_TAILS; j = j + 1) begin //assign coord of prvious tails to current
+					if (j == (tail_count - 1)) begin
 						tails[j] <= {snake_head_x, snake_head_y};
-					end
-					else
-					begin
+					    end
+					else begin
 						if (j != `LAST_TAIL_ADDR) // won't compile without this,
 							// however, in reality this condition will always be true
-						begin
+						    begin
 							tails[j] <= tails[j + 1];
-						end
-					end
-				end
-			end
-			//end
-		end
-	end
+						    end
+					    end
+				    end
+			    end
+		    end
+	    end
 
 	always @(posedge update_clk or posedge reset)
 	begin

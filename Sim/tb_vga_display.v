@@ -19,7 +19,7 @@ reg [0:1]   ent       ;
 initial
 	begin
     sys_clk   = 1;
-    iColor_SW <= 1;
+    iColor_SW <= 0;
     ent      <= 2'b1;
 	sys_rst  <= 1'b0;
 	#200

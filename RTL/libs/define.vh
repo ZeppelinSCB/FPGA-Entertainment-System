@@ -9,10 +9,11 @@
 `define DOWN_DIR 2'b10
 
 // entities
-`define ENT_NOTHING 2'b11
-`define ENT_SNAKE_HEAD 2'b01
-`define ENT_SNAKE_TAIL 2'b10
-`define ENT_APPLE 2'b00
+`define ENT_NOTHING     2'd3
+`define ENT_SNAKE_HEAD  2'b01
+`define ENT_SNAKE_TAIL  2'b10
+`define ENT_APPLE       2'b00
+`define ENT_WALL        3'd4
 
 // constants for output and game grid
 `define VGA_WIDTH 640
@@ -25,8 +26,9 @@
 
 `define DRAWING_CYCLES_TO_WAIT 3'd3
 
+`define SPRITE_MAX 4
 `define SPRITE_CNT 3
-`define SPRITE_MSB `SPRITE_CNT - 1
+`define SPRITE_MSB (`SPRITE_CNT - 1)
 
 `define GRID_WIDTH (`VGA_WIDTH/`H_SQUARE)
 `define GRID_HEIGHT (`VGA_HEIGHT/`V_SQUARE)

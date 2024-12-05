@@ -3,30 +3,26 @@
 
 module	vga_draw	(	//	Read Out Side
 						iVGA_CLK    ,
-                        ovga_x       ,
-                        ovga_y       ,
+                        ivga_x      ,
+                        ivga_y      ,
 						//	Control Signals
-						sys_reset_n ,
+						iReset_n ,
 						iColor_SW   ,
-						ent         ,  
+						iSprite      ,  
                         //  VGA port
-                        vga_rgb     ,
-                        vga_hsync   ,
-                        vga_vsync   ,
-                        vga_valid
+                        oRGB        
                     );
-//	Read Out Side
-output  wire [9:0]		ovga_x;
-output  wire [9:0]		ovga_y;
-input				iVGA_CLK;
-//	Control Signals
-input				sys_reset_n;
-input				iColor_SW; // drawing mode: either game or colored lines
-input	[0:1]		ent; // entity to draw
-output  wire [15:0]      vga_rgb;
-output  wire             vga_hsync;
-output  wire             vga_vsync;
-output  wire             vga_valid;
+input  wire [9:0]   ivga_x;
+input  wire [9:0]   ivga_y;
+input			    iVGA_CLK;
+input			    iReset_n;
+input			    iColor_SW; // drawing mode: either game or colored lines
+input       [0:1]   iSprite; // entity to draw
+output reg  [15:0]  oRGB;
+
+reg red, green, blue;
+wire [15:0] rgb_sprite;   //wire to connect to module
+reg [15:0] rgb_background;//background color
 
 // Array of sprites
 /*
@@ -36,119 +32,84 @@ output  wire             vga_valid;
 
 Every sprite consists of 3 bits - RGB values of a particular pixel
 */
-reg [0:`SPRITE_MSB] sp [0:2][0:`H_SQUARE_LAST_ADDR][0:`V_SQUARE_LAST_ADDR];
-
-reg[4:0] hRed;
-reg[5:0] hGreen;
-reg[4:0] hBlue;
-reg      oRed;
-reg      oGreen;
-reg      oBlue;
-wire[15:0] oRGB;
-
+reg [0:2] sp [0:3][0:`H_SQUARE_LAST_ADDR][0:`V_SQUARE_LAST_ADDR];
+// assign value to the sprite
 initial
 begin
 	`SPRITE_INIT
 end
-//convert RGB into 16bit color
-always @(*) begin
-    case (oRed)
-        1'b0:    hRed = 5'b00000;
-        1'b1:    hRed = 5'b11111;
-        default: hRed = 5'b00000;
-        endcase
-    case (oGreen)
-        1'b0:    hGreen = 6'b000000;
-        1'b1:    hGreen = 6'b111111;
-        default: hGreen = 6'b000000;
-        endcase
-    case (oBlue)
-        1'b0:    hBlue = 5'b00000;
-        1'b1:    hBlue = 5'b11111;
-        default: hBlue = 5'b00000;
-        endcase
+
+// selete the signal to output
+always @(iVGA_CLK) begin
+    if(iColor_SW == 1'b1)
+        oRGB = rgb_background;
+    else if (iSprite == `ENT_NOTHING)
+        oRGB = rgb_background;
+        //oRGB = rgb_sprite;
+    else
+        oRGB = rgb_sprite;
 end
 
-assign oRGB = {hRed,hGreen,hBlue};
-
-
-always @(posedge iVGA_CLK or negedge sys_reset_n)
-begin
-	if(!sys_reset_n) begin
-		oRed   <= 0;
-		oGreen <= 0;
-		oBlue  <= 0;
-	    end
-	else begin
-	    if(iColor_SW == 0) begin
-	    	// DRAW CURRENT STATE
-	    	if (ent == `ENT_NOTHING) begin
-	    		oRed   <= 1;
-	    		oGreen <= 1;
-	    		oBlue  <= 1;
-	    	    end
-	    	else begin
-	    		// Drawing a particular pixel from  sprite
-	    		oRed   <= sp[ent][ovga_x % `H_SQUARE] [ovga_y % `V_SQUARE][0];
-	    		oGreen <= sp[ent][ovga_x % `H_SQUARE] [ovga_y % `V_SQUARE][1];
-	    		oBlue  <= sp[ent][ovga_x % `H_SQUARE] [ovga_y % `V_SQUARE][2];
-	    	    end
-	        end
-	    else begin //Draw lines of every color that can  be produces
-	    	if (ovga_x < 60) begin
-	    		oRed <= 1;
-	    		oGreen <= 1;
-	    		oBlue <= 1;
-	    	    end 
-            else if (ovga_x < 120) begin
-	    		oRed <= 1;
-	    		oGreen <= 0;
-	    		oBlue <= 1;
-	    	    end  
-            else if (ovga_x < 180) begin
-	    		oRed <= 1;
-	    		oGreen <= 1;
-	    		oBlue <= 0;
-	    	    end  
-            else if (ovga_x < 240) begin
-	    		oRed <= 1;
-	    		oGreen <= 0;
-	    		oBlue <= 0;
-	    	    end
-            else if (ovga_x < 300) begin
-	    		oRed <= 0;
-	    		oGreen <= 1;
-	    		oBlue <= 1;
-	    	    end
-            else if (ovga_x < 360) begin
-	    		oRed <= 0;
-	    		oGreen <= 0;
-	    		oBlue <= 1;
-	    	    end
-            else if (ovga_x < 420) begin
-	    		oRed <= 0;
-	    		oGreen <= 1;
-	    		oBlue <= 0;
-	    	    end  
-            else begin
-	    		oRed <= 0;
-	    		oGreen <= 0;
-	    		oBlue <= 0;
-	    	    end
-            end
-	    end
-end
-
-vga_ctrl vga_ctrl_inst(
-    .vga_clk     (iVGA_CLK),
-    .sys_rst_n   (sys_reset_n),
-    .pix_data    (oRGB),
-    .pix_x       (ovga_x),
-    .pix_y       (ovga_y),
-    .hsync       (vga_hsync),
-    .vsync       (vga_vsync),
-    .rgb         (vga_rgb),
-    .rgb_valid   (vga_valid)
+// Draw the iSprite
+rgb_to_565 rgb_sprite_converter(
+    .iR          (red),
+    .iG          (green),
+    .iB          (blue),
+    .oRGB_565    (rgb_sprite)
 );
 
+always @(posedge iVGA_CLK or negedge iReset_n) begin
+	if(!iReset_n) begin
+		red   <= sp[0][ivga_x % `H_SQUARE] [ivga_y % `V_SQUARE][0];
+		green <= sp[0][ivga_x % `H_SQUARE] [ivga_y % `V_SQUARE][1];
+		blue  <= sp[0][ivga_x % `H_SQUARE] [ivga_y % `V_SQUARE][2];
+	    end
+	else if((iSprite >= 0)&& (iSprite <= (`SPRITE_MAX -1)))begin
+        red   <= sp[iSprite][ivga_x % `H_SQUARE] [ivga_y % `V_SQUARE][0];
+        green <= sp[iSprite][ivga_x % `H_SQUARE] [ivga_y % `V_SQUARE][1];
+        blue  <= sp[iSprite][ivga_x % `H_SQUARE] [ivga_y % `V_SQUARE][2];
+        end
+    else begin
+        red   <= sp[0][ivga_x % `H_SQUARE] [ivga_y % `V_SQUARE][0];
+        green <= sp[0][ivga_x % `H_SQUARE] [ivga_y % `V_SQUARE][1];
+        blue  <= sp[0][ivga_x % `H_SQUARE] [ivga_y % `V_SQUARE][2];
+        end
+    end
+
+localparam
+   RED     = 16'hF800,
+   ORANGE  = 16'hFC00,
+   YELLOW  = 16'hFFE0,
+   GREEN   = 16'h07E0,
+   CYAN    = 16'h07FF,
+   BLUE    = 16'h001F,
+   PURPPLE = 16'hF81F,
+   BLACK   = 16'h0000,
+   WHITE   = 16'hFFFF,
+   GRAY    = 16'hD69A;
+
+// Draw the Background
+always @(posedge iVGA_CLK) begin
+    if(!iColor_SW)
+        rgb_background <= 16'hffff;
+    else
+    begin
+	    if      (ivga_x < 60)
+            rgb_background <= RED;
+        else if (ivga_x < 120)
+            rgb_background <= ORANGE;
+        else if (ivga_x < 180)
+            rgb_background <= YELLOW;
+        else if (ivga_x < 240)
+            rgb_background <= GREEN;
+        else if (ivga_x < 300)
+            rgb_background <= CYAN;
+        else if (ivga_x < 360)
+            rgb_background <= BLUE;
+        else if (ivga_x < 420)
+            rgb_background <= PURPPLE;
+        else
+            rgb_background <= WHITE;
+        end
+    end
 endmodule

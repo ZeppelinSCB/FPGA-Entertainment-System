@@ -65,7 +65,7 @@ begin
 			direction = `DOWN_DIR; 
 		end 
         */
-        direction = `TOP_DIR;
+        direction = `RIGHT_DIR;
 	end 
 
 end 

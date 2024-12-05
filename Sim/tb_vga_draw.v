@@ -2,9 +2,11 @@
 module  tb_vga_draw();
 
 wire [15:0] draw_RGB  ;
-wire        dR        ;
-wire        dG        ;
-wire        dB        ;
+wire [15:0] sprite_RGB;
+wire [15:0] back_RGB  ;
+wire        R         ;
+wire        G         ;
+wire        B         ;
 wire [15:0] out_RGB   ;
 wire        hsync     ;
 wire        vsync     ;
@@ -21,17 +23,19 @@ initial
     VGA_X = 0;
     VGA_Y = 0;
     sys_clk   = 1;
-    iColor_SW <= 1;
-    ent      <= 1;
-	sys_rst  <= 1'b0;
+    iColor_SW = 1;
+    ent      = 1;
+	sys_rst  = 1'b0;
 	#200
-	sys_rst  <= 1'b1;
+	sys_rst  = 1'b1;
 	end
 
 always #10 sys_clk = ~sys_clk;
-assign dR = Drawer_inst.oRed;
-assign dG = Drawer_inst.oGreen;
-assign dB = Drawer_inst.oBlue;
+assign R = Drawer_inst.red;
+assign G = Drawer_inst.green;
+assign B = Drawer_inst.blue;
+assign sprite_RGB = Drawer_inst.rgb_sprite;
+assign back_RGB   = Drawer_inst.rgb_background;
 
 always@(posedge sys_clk) begin
     if(VGA_X >= 640-1)
@@ -49,13 +53,22 @@ always@(posedge sys_clk) begin
         VGA_Y <= VGA_Y;
 end
 
+always@(posedge sys_clk) begin
+    if(ent >= 2'd3)
+        ent <= 0;
+    else if(VGA_X % 16 == 0)
+        ent <= ent + 1;
+    else
+        ent <= ent;
+end
+
 vga_draw Drawer_inst	(	//	Read Out Side
-        .oRGB     (draw_RGB),
-        .oVGA_X   (VGA_X),
-        .oVGA_Y   (VGA_Y),
-        .iVGA_CLK (sys_clk),
-        .reset    (!sys_rst),
-        .iColor_SW(iColor_SW),
-        .ent      (ent)
-    );
+    .iVGA_CLK    (sys_clk),
+    .ivga_x      (VGA_X),
+    .ivga_y      (VGA_Y),
+    .iReset_n    (sys_rst),
+    .iColor_SW   (iColor_SW),
+    .iSprite      (ent),
+    .oRGB        (draw_RGB)
+);
 endmodule
