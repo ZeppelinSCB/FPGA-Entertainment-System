@@ -64,10 +64,10 @@ end
 always @(posedge clk)
 begin
 
-    left = key_left;
-    right = key_right;
-    up = key_up;
-    down = key_down;
+    left = key_left		;//left = two_resistors_x;
+    right = key_right	;//right = ~one_resistor_x;
+    up = key_up			;//up = two_resistors_y;
+    down = key_down		;//down = ~one_resistor_y;
 
 	if((left + right + up + down == 3'b001)&&(key_flag == 1'b1)) // if only one pressed 
 

@@ -4,10 +4,10 @@
 module main (
 	// joystick input
 	input wire
-		res_x_one   ,
-		res_x_two   ,
-		res_y_one   ,
-		res_y_two   ,
+		key0   ,
+		key1   ,
+		key2   ,
+		key3   ,
 
 	input wire 
         sys_clk     , // 50MHz
@@ -89,11 +89,11 @@ module main (
 		.out_clk(update_clk)
 	);
 
-	joystick_input ji (
-		.one_resistor_x(res_x_one),
-		.two_resistors_x(res_x_two),
-		.one_resistor_y(res_y_one),
-		.two_resistors_y(res_y_two),
+	key_in key_input_inst (
+		.key_right(key3),
+		.key_left(key0),
+		.key_down(key2),
+		.key_up(key1),
 		.clk(update_clk),
 		.direction(dir)
 	);
