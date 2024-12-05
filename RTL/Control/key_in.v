@@ -14,16 +14,17 @@ module key_in
 
 );
 
-input key_up        ;
-input key_down      ;
-input key_left      ;
-input key_right     ;
-input clk           ;
-input sys_clk       ;
-input sys_rst_n     ;
+input wire key_up        ;//key1
+input wire key_down      ;//key2
+input wire key_left      ;//key0
+input wire key_right     ;//key3
+input wire key_flag		;
+input wire clk           ;
+input wire sys_clk       ;
+input wire sys_rst_n     ;
 
 output reg [0:1] direction;
-output reg key_flag;
+
 
 reg left, right, up, down;
 reg key_press;
