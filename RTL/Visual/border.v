@@ -15,18 +15,18 @@ module border
     number_y    
 );
 
-input             vga_clk      ;
-input             sys_rst_n    ;
-input [ 3:0]      time_1s      ;  
-input [ 3:0]      time_10s     ;
-input [ 3:0]      time_100s    ;
+input wire             vga_clk      ;
+input wire             sys_rst_n    ;
+input wire  [3:0]      time_1s      ;  
+input wire  [3:0]      time_10s     ;
+input wire  [3:0]      time_100s    ;
 
-output         pix_x        ;
-output         pix_y        ;
-output         pix_data     ;
-output [3:0]   number_i     ;
-output [3:0]   number_x     ;
-output [3:0]   number_y     ;
+output              pix_x        ;
+output              pix_y        ;
+output              pix_data     ;
+output reg  [3:0]   number_i     ;
+output reg  [3:0]   number_x     ;
+output reg  [3:0]   number_y     ;
 
 reg score_colour;
 
