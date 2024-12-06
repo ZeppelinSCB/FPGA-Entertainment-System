@@ -65,9 +65,9 @@ always @(posedge iVGA_CLK or negedge iReset_n) begin
 		blue  <= sp[0][ivga_x % `H_SQUARE] [ivga_y % `V_SQUARE][2];
 	    end
 	else if((iSprite >= 0)&& (iSprite <= (`SPRITE_MAX -1)))begin
-        red   <= sp[iSprite][ivga_x % `H_SQUARE] [ivga_y % `V_SQUARE][0];
-        green <= sp[iSprite][ivga_x % `H_SQUARE] [ivga_y % `V_SQUARE][1];
-        blue  <= sp[iSprite][ivga_x % `H_SQUARE] [ivga_y % `V_SQUARE][2];
+        red   <= sp[iSprite][(ivga_x) % `H_SQUARE] [(ivga_y) % `V_SQUARE][0];
+        green <= sp[iSprite][(ivga_x) % `H_SQUARE] [(ivga_y) % `V_SQUARE][1];
+        blue  <= sp[iSprite][(ivga_x) % `H_SQUARE] [(ivga_y) % `V_SQUARE][2];
         end
     else begin
         red   <= sp[0][ivga_x % `H_SQUARE] [ivga_y % `V_SQUARE][0];

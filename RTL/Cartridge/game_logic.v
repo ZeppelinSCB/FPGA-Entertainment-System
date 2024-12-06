@@ -5,9 +5,11 @@ module game_logic (
 	input [0:1] direction,
 	input wire [9:0] x_in, y_in, // new values are given at each clock cycle
 	output reg [0:1] entity,
-	output reg game_over, game_won,
+    output wire game_over,
+	output reg game_won,
 	output reg `TAIL_SIZE tail_count
 );
+reg hit_self, hit_wall;
 wire `X_SIZE grid_coord_x;
 wire `Y_SIZE grid_coord_y;
 reg `X_SIZE snake_head_x, apple_x;
@@ -32,10 +34,10 @@ wire flag_time_max;//indicates that the time is over
 		.rnd(rand_num_y_orig)
 	);
 
-	assign rand_num_x_fit = rand_num_x_orig % `LAST_HOR_ADDR;
-	assign rand_num_y_fit = rand_num_y_orig % `LAST_VER_ADDR;
+	assign rand_num_x_fit = 1+rand_num_x_orig % (`LAST_HOR_ADDR-2);
+	assign rand_num_y_fit = 1+rand_num_y_orig % (`LAST_VER_ADDR-2);
     integer i, j;
-
+    assign game_over = hit_self | hit_wall;
 task init_apple();
 	begin
 		apple_x <= `GRID_MID_WIDTH ;
@@ -45,12 +47,13 @@ endtask
 
 initial
 	begin
+        hit_self <= 0;
+        hit_wall <= 0;
 		init_apple();
 		snake_head_x <= `GRID_MID_WIDTH ;
 		snake_head_y <= `GRID_MID_HEIGHT;
 		tail_count   <= 0;
 		game_won     <= 0;
-        game_over    <= 0;
 	end
 
 	assign grid_coord_x = (x_in / `H_SQUARE);
@@ -82,7 +85,7 @@ always @(posedge vga_clk) begin
 // the current coordinate is a tail
 always @(posedge vga_clk or posedge reset) begin
 	if (reset) begin
-		game_over = 0;
+		hit_self = 0;
 		end
 	else begin
         is_cur_coord_tail = 0;
@@ -91,7 +94,7 @@ always @(posedge vga_clk or posedge reset) begin
 				if (tails[i] == {grid_coord_x, grid_coord_y}) begin // if a tail
 					is_cur_coord_tail = 1'b1;
 					if (tails[i] == {snake_head_x, snake_head_y}) begin//Snake collides with itself
-						game_over = 1'b1;
+						hit_self = 1'b1;
 					    end
 				    end
 			    end
@@ -175,8 +178,8 @@ always @(posedge update_clk or posedge reset) begin
                 tail_count <= tail_count + 1;
             else
                 tail_count <= tail_count;
-            apple_x <= `GRID_MID_WIDTH ;
-            apple_y <= `GRID_MID_HEIGHT;
+            apple_x <= rand_num_x_fit;
+            apple_y <= rand_num_y_fit;
             end
         end
     end
