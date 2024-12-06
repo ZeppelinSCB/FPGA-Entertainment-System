@@ -2,7 +2,7 @@
 `include "./libs/define.vh"
 
 module main (
-	// joystick input
+	// key input
 	input wire
 		key_UUPP    ,
 		key_DOWN    ,
@@ -87,14 +87,15 @@ clk_gen vga_clk_gen (
 
 // Slow down clock for game
 game_upd_clk upd_clk(
-	.in_clk(vga_clk),
-	.sys_reset_n(reset_n),
-	.x_in(src_coord_X),
-	.y_in(src_coord_Y),
-	.out_clk(update_clk)
+	.in_clk     (vga_clk    ),
+	.sys_reset_n(reset_n    ),
+	.x_in       (src_coord_X),
+	.y_in       (src_coord_Y),
+	.out_clk    (update_clk )
 );
 
-key_in key_input_inst (
+//key_in contains key_filter section but unstable, *key_input
+key_in key_in_inst (
 	.key_right	(key_RGHT),
 	.key_left	(key_LEFT),
 	.key_down	(key_DOWN),
@@ -104,16 +105,16 @@ key_in key_input_inst (
 );
 
 game_logic game_logic_module (
-	.vga_clk(vga_clk),
-	.update_clk(update_clk),
-	.reset(reset_p),
-	.direction(dir),
-	.x_in(src_coord_X),
-	.y_in(src_coord_Y),
-	.entity(cur_ent_code),
+	.vga_clk        (vga_clk     ),
+	.update_clk     (update_clk  ),
+	.reset          (reset_p     ),
+	.direction      (dir         ),
+	.x_in           (src_coord_X ),
+	.y_in           (src_coord_Y ),
+	.entity         (cur_ent_code),
 	//.game_over(),
 	//.game_won(),
-	.tail_count(game_score)
+	.tail_count     (game_score  )
 );
 
 // VGA controller that constantly scans the screen
