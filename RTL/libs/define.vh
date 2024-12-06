@@ -8,6 +8,13 @@
 `define RIGHT_DIR 2'b11
 `define DOWN_DIR 2'b10
 
+`define STATE_BIT 3
+`define STATE_START 3'b000
+`define STATE_DIFF 3'b001
+`define STATE_INGAME 3'b011
+`define STATE_WON 3'b010
+`define STATE_OVER 3'b110
+
 // entities
 `define ENT_NOTHING     2'd3
 `define ENT_SNAKE_HEAD  2'b01
