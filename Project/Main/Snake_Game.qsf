@@ -39,7 +39,7 @@
 
 set_global_assignment -name FAMILY "Cyclone IV E"
 set_global_assignment -name DEVICE EP4CE10F17C8
-set_global_assignment -name TOP_LEVEL_ENTITY key_in
+set_global_assignment -name TOP_LEVEL_ENTITY bintodeci
 set_global_assignment -name ORIGINAL_QUARTUS_VERSION 23.1STD.1
 set_global_assignment -name PROJECT_CREATION_TIME_DATE "12:38:33  NOVEMBER 30, 2024"
 set_global_assignment -name LAST_QUARTUS_VERSION "23.1std.1 Lite Edition"
@@ -66,26 +66,6 @@ set_location_assignment PIN_K16 -to tmds_data_n[2]
 set_location_assignment PIN_L16 -to tmds_data_n[1]
 set_location_assignment PIN_N16 -to tmds_data_n[0]
 set_location_assignment PIN_M15 -to reset
-set_location_assignment PIN_P16 -to HDMI_CLK_N
-set_location_assignment PIN_R16 -to HDMI_CLK_P
-set_global_assignment -name VERILOG_FILE ../../RTL/Cartridge/fsm.v
-set_global_assignment -name VERILOG_FILE ../../RTL/Control/key_in.v
-set_global_assignment -name VERILOG_FILE ../../RTL/game_time.v
-set_global_assignment -name VERILOG_FILE ../../RTL/Visual/par_to_ser.v
-set_global_assignment -name VERILOG_FILE ../../RTL/main.v
-set_global_assignment -name VERILOG_FILE ../../RTL/Visual/vga_draw.v
-set_global_assignment -name VERILOG_FILE ../../RTL/Visual/vga_ctrl.v
-set_global_assignment -name VERILOG_FILE ../../RTL/Visual/hdmi_enc.v
-set_global_assignment -name VERILOG_FILE ../../RTL/Visual/hdmi_ctrl.v
-set_global_assignment -name VERILOG_FILE ../../RTL/Visual/encode.v
-set_global_assignment -name VERILOG_FILE ../../RTL/random/LFSR/LFSR.v
-set_global_assignment -name VERILOG_FILE ../../RTL/random/random_num_gen_63.v
-set_global_assignment -name VERILOG_FILE ../../RTL/Control/key_filter.v
-set_global_assignment -name VERILOG_FILE ../../RTL/Control/joystick_input.v
-set_global_assignment -name VERILOG_FILE ../../RTL/Cartridge/game_upd_clk.v
-set_global_assignment -name VERILOG_FILE ../../RTL/Cartridge/game_logic.v
-set_global_assignment -name QIP_FILE ../../RTL/ipcore_dir/ddio_out.qip
-set_global_assignment -name QIP_FILE ../../RTL/ipcore_dir/clk_gen.qip
 set_location_assignment PIN_E1 -to sys_clk
 set_location_assignment PIN_P16 -to HDMI_CLK_N
 set_location_assignment PIN_R16 -to HDMI_CLK_P
@@ -99,7 +79,7 @@ set_location_assignment PIN_N16 -to HDMI_tmds_data_n[0]
 set_location_assignment PIN_N14 -to HDMI_ddc_sda
 set_location_assignment PIN_P15 -to HDMI_ddc_scl
 set_global_assignment -name EDA_TEST_BENCH_ENABLE_STATUS TEST_BENCH_MODE -section_id eda_simulation
-set_global_assignment -name EDA_NATIVELINK_SIMULATION_TEST_BENCH tb_vga_draw -section_id eda_simulation
+set_global_assignment -name EDA_NATIVELINK_SIMULATION_TEST_BENCH tb_bintodeci -section_id eda_simulation
 set_global_assignment -name EDA_TEST_BENCH_NAME tb_main -section_id eda_simulation
 set_global_assignment -name EDA_DESIGN_INSTANCE_NAME NA -section_id tb_main
 set_global_assignment -name EDA_TEST_BENCH_RUN_SIM_FOR "10 s" -section_id tb_main
@@ -129,12 +109,26 @@ set_global_assignment -name EDA_TEST_BENCH_MODULE_NAME tb_game_logic -section_id
 set_global_assignment -name EDA_TEST_BENCH_NAME tb_vga_draw -section_id eda_simulation
 set_global_assignment -name EDA_DESIGN_INSTANCE_NAME NA -section_id tb_vga_draw
 set_global_assignment -name EDA_TEST_BENCH_MODULE_NAME tb_vga_draw -section_id tb_vga_draw
+set_location_assignment PIN_E15 -to key_DOWN
+set_location_assignment PIN_M2 -to key_LEFT
+set_location_assignment PIN_E16 -to key_RGHT
+set_location_assignment PIN_M1 -to key_UUPP
+set_global_assignment -name EDA_TEST_BENCH_NAME tb_key_in -section_id eda_simulation
+set_global_assignment -name EDA_DESIGN_INSTANCE_NAME NA -section_id tb_key_in
+set_global_assignment -name EDA_TEST_BENCH_MODULE_NAME tb_key_in -section_id tb_key_in
 set_global_assignment -name EDA_TEST_BENCH_FILE ../../Sim/tb_main.v -section_id tb_main
 set_global_assignment -name EDA_TEST_BENCH_FILE ../../Sim/tb_game_logic.v -section_id tb_game_logic
 set_global_assignment -name EDA_TEST_BENCH_FILE ../../Sim/tb_vga_draw.v -section_id tb_vga_draw
-set_global_assignment -name PARTITION_NETLIST_TYPE SOURCE -section_id Top
-set_global_assignment -name PARTITION_FITTER_PRESERVATION_LEVEL PLACEMENT_AND_ROUTING -section_id Top
-set_global_assignment -name PARTITION_COLOR 16764057 -section_id Top
+set_global_assignment -name EDA_TEST_BENCH_FILE ../../Sim/tb_key_in.v -section_id tb_key_in
+set_global_assignment -name EDA_TEST_BENCH_NAME tb_bintodeci -section_id eda_simulation
+set_global_assignment -name EDA_DESIGN_INSTANCE_NAME NA -section_id tb_bintodeci
+set_global_assignment -name EDA_TEST_BENCH_MODULE_NAME tb_bintodeci -section_id tb_bintodeci
+set_global_assignment -name EDA_TEST_BENCH_FILE ../../Sim/tb_bintodeci.v -section_id tb_bintodeci
+set_global_assignment -name VERILOG_FILE ../../RTL/Visual/bintodeci.v
+set_global_assignment -name VERILOG_FILE ../../Sim/tb_bintodeci.v
+set_global_assignment -name VERILOG_FILE ../../RTL/Cartridge/fsm.v
+set_global_assignment -name VERILOG_FILE ../../RTL/Control/key_in.v
+set_global_assignment -name VERILOG_FILE ../../RTL/Visual/encode.v
 set_global_assignment -name VERILOG_FILE ../../RTL/Control/key_input.v
 set_global_assignment -name VERILOG_FILE ../../RTL/logic_main.v
 set_global_assignment -name VERILOG_FILE ../../RTL/Visual/hdmi_enc.v
@@ -156,12 +150,7 @@ set_global_assignment -name VERILOG_FILE ../../RTL/Cartridge/game_logic.v
 set_global_assignment -name QIP_FILE ../../RTL/ipcore_dir/clk_gen.qip
 set_global_assignment -name SOURCE_FILE db/Snake_Game.cmp.rdb
 set_global_assignment -name VERILOG_FILE ../../Sim/tb_main.v
-set_location_assignment PIN_E15 -to key_DOWN
-set_location_assignment PIN_M2 -to key_LEFT
-set_location_assignment PIN_E16 -to key_RGHT
-set_location_assignment PIN_M1 -to key_UUPP
+set_global_assignment -name PARTITION_NETLIST_TYPE SOURCE -section_id Top
+set_global_assignment -name PARTITION_FITTER_PRESERVATION_LEVEL PLACEMENT_AND_ROUTING -section_id Top
+set_global_assignment -name PARTITION_COLOR 16764057 -section_id Top
 set_instance_assignment -name PARTITION_HIERARCHY root_partition -to | -section_id Top
-set_global_assignment -name EDA_TEST_BENCH_NAME tb_key_in -section_id eda_simulation
-set_global_assignment -name EDA_DESIGN_INSTANCE_NAME NA -section_id tb_key_in
-set_global_assignment -name EDA_TEST_BENCH_MODULE_NAME tb_key_in -section_id tb_key_in
-set_global_assignment -name EDA_TEST_BENCH_FILE ../../Sim/tb_key_in.v -section_id tb_key_in
