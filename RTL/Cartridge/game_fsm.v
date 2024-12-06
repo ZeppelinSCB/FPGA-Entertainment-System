@@ -22,8 +22,7 @@ input key_right      ;
 
 parameter GAME_START = 2'b00;
 parameter IN_GAME = 2'b01;
-parameter GAME_WON = 2'b11;
-parameter GAME_OVER = 2'b10;
+parameter GAME_END = 2'b11;
 
 reg [0:0] key_press;
 reg [1:0] state;//Using Grey-Code to represent
@@ -32,15 +31,18 @@ reg [1:0] state;//Using Grey-Code to represent
 always@(*)//detect key input
     if((key_up==1) || (key_down==1) || (key_left==1) || (key_down==1)) begin
         key_press = 1;
-    end
+        end
+    else begin
+        key_press = 0;
+        end
 
 
-always@(posedge vga_clk or negedge sys_rst_n)//state machine to decide what to do next
+always@(posedge vga_clk or negedge sys_rst_n) begin//state machine to decide what to do next
     if(sys_rst_n == 1'b0)
 	    state <= GAME_START; 
     else case(state)
         GAME_START:
-            if((key_press==1)&&((game_won==0)||(game_over==0))) begin
+            if(key_press==1) begin
                 state <= IN_GAME;
                 end
             else begin
@@ -56,20 +58,25 @@ always@(posedge vga_clk or negedge sys_rst_n)//state machine to decide what to d
             else begin
                 state <= IN_GAME;
                 end
-        GAME_WON:
+        GAME_END:
             if(key_press==1) begin
                 state <= GAME_START;
                 end
             else begin
-                state <= GAME_WON;
-                end
-        GAME_OVER:
-            if(key_press==1) begin
-                state <= GAME_START;
-                end
-            else begin
-                state <= GAME_WON;
+                state <= GAME_END;
                 end
         default: state <= GAME_START;
     endcase
+end
+
+always@(posedge vga_clk or negedge sys_rst_n) begin//state machine to decide what to do next
+    if(sys_rst_n == 1'b0)
+
+    if(state == GAME_START)    
+
+    if(state == IN_GAME)
+
+    if(state == GAME_END)
+
+end
 endmodule
