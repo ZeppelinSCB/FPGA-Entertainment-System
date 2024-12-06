@@ -41,12 +41,12 @@
 `define LAST_VER_ADDR (`GRID_HEIGHT - 1)
 
 // memory
-`define MEM_VERT_ADDR_MSB $clog2(`GRID_WIDTH)
-`define MEM_HOR_ADDR_MSB $clog2(`GRID_HEIGHT)
+`define MEM_BITS_HOR_G $clog2(`GRID_WIDTH)
+`define MEM_BITS_VERT_G $clog2(`GRID_HEIGHT)
 
-`define X_SIZE [`MEM_VERT_ADDR_MSB:0]
-`define Y_SIZE [`MEM_HOR_ADDR_MSB:0]
-`define COORD_SIZE [`MEM_VERT_ADDR_MSB + `MEM_HOR_ADDR_MSB:0]
+`define X_SIZE [`MEM_BITS_HOR_G:0]
+`define Y_SIZE [`MEM_BITS_VERT_G:0]
+`define COORD_SIZE [`MEM_BITS_VERT_G + `MEM_BITS_HOR_G:0]
 
 `define MAX_TAILS 128
 `define LAST_TAIL_ADDR (`MAX_TAILS - 1)

@@ -26,13 +26,13 @@ initial begin
     end
 
 always @(posedge iClk) begin
-    if (up)
+    if (up && (oDirection!=`DOWN_DIR))
         oDirection = `TOP_DIR;
-    else if(down)
+    else if(down && (oDirection!=`TOP_DIR))
         oDirection = `DOWN_DIR;
-    else if(left)
+    else if(left && (oDirection!=`RIGHT_DIR))
         oDirection = `LEFT_DIR;
-    else if(right)
+    else if(right && (oDirection!=`LEFT_DIR))
         oDirection = `RIGHT_DIR;
     else
         oDirection = oDirection;
