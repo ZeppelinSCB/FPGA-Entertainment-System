@@ -94,8 +94,8 @@ game_upd_clk upd_clk(
 	.out_clk    (update_clk )
 );
 
-//key_in contains key_filter section but unstable, *key_input
-key_in key_in_inst (
+
+key_input key_input_inst (
 	.key_right	(key_RGHT),
 	.key_left	(key_LEFT),
 	.key_down	(key_DOWN),
@@ -105,16 +105,17 @@ key_in key_in_inst (
 );
 
 game_logic game_logic_module (
-	.vga_clk        (vga_clk     ),
-	.update_clk     (update_clk  ),
-	.reset          (reset_p     ),
-	.direction      (dir         ),
-	.x_in           (src_coord_X ),
-	.y_in           (src_coord_Y ),
-	.entity         (cur_ent_code),
+	.vga_clk        (vga_clk      ),
+	.update_clk     (update_clk   ),
+	.reset          (reset_p      ),
+	.direction      (dir          ),
+	.x_in           (src_coord_X  ),
+	.y_in           (src_coord_Y  ),
+	.entity         (cur_ent_code ),
 	//.game_over(),
 	//.game_won(),
-	.tail_count     (game_score  )
+	.tail_count     (game_score   ),
+    .flag_time_max  (time_max_flag)
 );
 
 // VGA controller that constantly scans the screen
@@ -139,6 +140,22 @@ vga_draw    vga_draw_inst(
     .iColor_SW   (VISUAL_DEBUG),
     .iSprite     (cur_ent_code),
     .oRGB        (draw_RGB)
+);
+
+page_start page_start_inst(
+    .screen_x   (src_coord_X),
+    .screen_y   (src_coord_y),
+    .vga_clk    (vga_clk),
+    .sys_rst_n  (reset_n),
+    .pix_data   ()
+);
+
+page_end page_end_inst(
+    .screen_x   (src_coord_X),
+    .screen_y   (src_coord_y),
+    .vga_clk    (vga_clk),
+    .sys_rst_n  (reset_n),
+    .score      (game_score),
 );
 
     
