@@ -30,7 +30,7 @@ reg [1:0] state;//Using Grey-Code to represent
 
 
 always@(*)//detect key input
-    if(key_up==1 || key_down==1 || key_left==1 || key_down==1) begin
+    if((key_up==1) || (key_down==1) || (key_left==1) || (key_down==1)) begin
         key_press = 1;
     end
 
@@ -40,36 +40,36 @@ always@(posedge vga_clk or negedge sys_rst_n)//state machine to decide what to d
 	    state <= GAME_START; 
     else case(state)
         GAME_START:
-            if(key_press==1) begin
+            if((key_press==1)&&((game_won==0)||(game_over==0))) begin
                 state <= IN_GAME;
-            end
+                end
             else begin
                 state <= GAME_START;
-            end
+                end
         IN_GAME:
             if(game_won==1) begin
                 state <= GAME_WON;
-            end
+                end
             else if(game_over==1) begin
                 state <= GAME_OVER;
-            end
+                end
             else begin
                 state <= IN_GAME;
-            end
+                end
         GAME_WON:
             if(key_press==1) begin
                 state <= GAME_START;
-            end
+                end
             else begin
                 state <= GAME_WON;
-            end
+                end
         GAME_OVER:
             if(key_press==1) begin
                 state <= GAME_START;
-            end
+                end
             else begin
                 state <= GAME_WON;
-            end
+                end
         default: state <= GAME_START;
     endcase
 endmodule
