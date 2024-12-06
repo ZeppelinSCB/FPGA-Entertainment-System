@@ -14,5 +14,4 @@ bintodeci bintodeci_inst(
     .bin(bin),
     .bcd(bcd)
 );
-
 endmodule

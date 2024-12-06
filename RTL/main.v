@@ -155,7 +155,7 @@ page_end page_end_inst(
     .screen_y   (src_coord_y),
     .vga_clk    (vga_clk),
     .sys_rst_n  (reset_n),
-    .score      (game_score),
+    .score      (bcd),
 );
 
     
@@ -181,6 +181,11 @@ hdmi_ctrl hdmi_ctrl_inst(
     .hdmi_g_n   (HDMI_tmds_data_n[1]),
     .hdmi_b_p   (HDMI_tmds_data_p[0]),
     .hdmi_b_n   (HDMI_tmds_data_n[0])
+);
+
+bintodeci bintodeci_inst(
+    .bin(game_score),
+    .bcd(bcd)
 );
 
 /*
