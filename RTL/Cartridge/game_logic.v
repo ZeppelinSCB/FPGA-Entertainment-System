@@ -6,7 +6,7 @@ module game_logic (
 	input wire [9:0] x_in, y_in, // new values are given at each clock cycle
 	input wire time_max_flag,//signal of value of time max
 	output reg [0:1] entity,
-	output reg game_over, game_won,
+	output reg game_over, game_won, 
 	output reg `TAIL_SIZE tail_count
 );
 	wire `X_SIZE cur_x;
@@ -201,6 +201,7 @@ module game_logic (
 		    end
 	    end
 
+	//Condition of winning: max tail, max time
 	always @(posedge update_clk or posedge reset)
 	begin
 		if (reset)
