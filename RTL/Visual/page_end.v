@@ -1,7 +1,7 @@
 //This page should be capable to show final score, game_time,"YOUR FINAL SCORE", "YOU DIED", "VICTORY ACHIEVED"
 `include "../libs/define.vh"
 
-module end_page
+module page_end
 (
     vga_clk,
     sys_rst_n,

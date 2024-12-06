@@ -1,7 +1,7 @@
 //Shown "SNAKE (GAME)" (and "PRESS ANY KEY") in the Start Page
 `include "../libs/define.vh"
 
-module start_page
+module page_start
 (
     vga_clk,
     sys_rst_n,
