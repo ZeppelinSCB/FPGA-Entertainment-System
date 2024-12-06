@@ -1,3 +1,4 @@
+//This module should be capable to show border in in_game stage
 `include "../libs/define.vh"
 
 module border
