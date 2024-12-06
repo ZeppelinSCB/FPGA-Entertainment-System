@@ -5,6 +5,7 @@ module game_time
     counter         ,
     game_won        ,
     game_over       ,
+    key_press       ,
     time_1s         ,
     time_10s        ,
     time_100s       ,
@@ -15,6 +16,7 @@ input wire                  sys_clk      ;
 input wire                  time_rst     ;
 input wire                  game_won     ;
 input wire                  game_over    ;
+input wire                  key_press    ;
 
 output reg      [ 3:0]      time_1s      ;  
 output reg      [ 3:0]      time_10s     ;
@@ -28,7 +30,7 @@ reg             [24:0]      counter      ;
 always@(posedge sys_clk or negedge sys_rst_n)//Time counter
 begin 
 	//One should use or to connect 
-	if((time_rst == 1'b0)||(game_over == 1'b1)||(game_won == 1'b0))
+	if((time_rst == 1'b0)||(game_won == 1'b0)||((key_press == 1'b1)&&(game_over == 1'b1)))
     begin
 		counter <= 0;
         time_1s   [3:0] <= 4'b0;
@@ -77,7 +79,12 @@ begin
             time_100s <= time_100s;
         end
 	end
-	else
+    else if(game_over == 1'b1) begin//Shown time to the end page
+        time_1s <= time_1s;
+        time_10s <= time_10s;
+        time_100s <= time_100s;        
+    end
+    else
 	begin
 		counter <= counter - 1'b1;
 	end
