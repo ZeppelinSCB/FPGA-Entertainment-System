@@ -13,8 +13,8 @@ wire `Y_SIZE grid_coord_y;
 reg `X_SIZE snake_head_x, apple_x;
 reg `Y_SIZE snake_head_y, apple_y;
 reg is_cur_coord_tail;
-reg [(`MEM_BITS_HOR_G*`TAIL_SIZE-1):0]   tail_x;
-reg [(`MEM_BITS_VERT_G*`TAIL_SIZE-1):0]  tail_y;
+// reg [`MEM_BITS_HOR_G*`TAIL_SIZE-1:0]   tail_x;
+// reg [`MEM_BITS_VERT_G*`TAIL_SIZE-1:0]  tail_y;
 reg `COORD_SIZE tails [0:`LAST_TAIL_ADDR];
 wire [5:0] rand_num_x_orig, rand_num_y_orig,
 	rand_num_x_fit, rand_num_y_fit;
@@ -45,11 +45,12 @@ endtask
 
 initial
 	begin
-		init();
+		init_apple();
 		snake_head_x <= `GRID_MID_WIDTH ;
 		snake_head_y <= `GRID_MID_HEIGHT;
-		tail_count <= 0;
-		game_won <= 0;
+		tail_count   <= 0;
+		game_won     <= 0;
+        game_over    <= 0;
 	end
 
 	assign grid_coord_x = (x_in / `H_SQUARE);
@@ -84,6 +85,7 @@ always @(posedge vga_clk or posedge reset) begin
 		game_over = 0;
 		end
 	else begin
+        is_cur_coord_tail = 0;
 		for (i = 0; i < `MAX_TAILS; i = i + 1) begin
 			if (i < tail_count) begin // if tail exists
 				if (tails[i] == {grid_coord_x, grid_coord_y}) begin // if a tail
@@ -91,11 +93,7 @@ always @(posedge vga_clk or posedge reset) begin
 					if (tails[i] == {snake_head_x, snake_head_y}) begin//Snake collides with itself
 						game_over = 1'b1;
 					    end
-					else
-						game_over = 1'b0;
 				    end
-                else
-                    is_cur_coord_tail = 1'b0;
 			    end
 		    end
 	    end
@@ -150,7 +148,7 @@ always @(posedge update_clk or posedge reset) begin
 // Move tails
 always @(posedge update_clk or posedge reset) begin
 	if (reset) 
-        tails [0:`LAST_TAIL_ADDR] <= tails [0:`LAST_TAIL_ADDR]; // do nothing
+        tails[0] <= tails[0];// do nothing
 	else begin
         if(~(game_over|game_won))
             // TODO: Check if this is correct
@@ -161,7 +159,7 @@ always @(posedge update_clk or posedge reset) begin
 		    		tails[j] <= tails[j - 1]; //assign coord of prvious tails to current
 		        end
         else
-            tails [0:`LAST_TAIL_ADDR]<= tails[0:`LAST_TAIL_ADDR];
+            tails[0] <= tails[0];
         end
 	end
 
