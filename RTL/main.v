@@ -63,6 +63,10 @@ wire	[9:0]	src_coord_X ; //coordinate respect to the screen
 wire	[9:0]	src_coord_Y ; //coordinate respect to the screen
 wire	        vga_en      ;
 
+// Start End
+wire   [15:0]   pix_data;
+
+
 // Game input
 wire [0:1] dir;
 
@@ -96,10 +100,10 @@ game_upd_clk upd_clk(
 
 
 key_input key_input_inst (
-	.key_right	(key_RGHT),
-	.key_left	(key_LEFT),
-	.key_down	(key_DOWN),
-	.key_up		(key_UUPP),
+	.iK_Left    (key_RGHT),
+	.iK_Right   (key_LEFT),
+	.iK_Up      (key_DOWN),
+	.iK_Down    (key_UUPP),
     .iClk       (sys_clk ),
     .oDirection (dir     )
 );
@@ -115,14 +119,14 @@ game_logic game_logic_module (
 	//.game_over(),
 	//.game_won(),
 	.tail_count     (game_score   ),
-    .flag_time_max  (time_max_flag)
+    .time_max_flag  (flag_time_max)
 );
 
 // VGA controller that constantly scans the screen
 vga_ctrl vga_ctrl_inst(
     .vga_clk     (vga_clk),
     .sys_rst_n   (reset_n),
-    .pix_data    (draw_RGB),
+    .pix_data    (pix_data),
     .pix_x       (src_coord_X),
     .pix_y       (src_coord_Y),
     .hsync       (VGA_HS),
@@ -147,7 +151,7 @@ page_start page_start_inst(
     .screen_y   (src_coord_y),
     .vga_clk    (vga_clk),
     .sys_rst_n  (reset_n),
-    .pix_data   ()
+    .pix_data   (pix_data)
 );
 
 page_end page_end_inst(
@@ -156,6 +160,7 @@ page_end page_end_inst(
     .vga_clk    (vga_clk),
     .sys_rst_n  (reset_n),
     .score      (bcd),
+    .pix_data   ()
 );
 
     
@@ -185,7 +190,7 @@ hdmi_ctrl hdmi_ctrl_inst(
 
 bintodeci bintodeci_inst(
     .bin(game_score),
-    .bcd(bcd)
+    .bcd(number_i)
 );
 
 /*
