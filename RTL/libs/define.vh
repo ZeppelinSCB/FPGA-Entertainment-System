@@ -8,7 +8,16 @@
 `define RIGHT_DIR 2'b11
 `define DOWN_DIR 2'b10
 
+`define STATE_BITS 3 //Number of bits for the state
+`define STATE_START     3'b000
+`define STATE_DIFF      3'b001
+`define STATE_INGAME    3'b011
+`define STATE_WON       3'b010
+`define STATE_OVER      3'b110
+`define STATE_TEST      3'b111
+
 // entities
+`define ENT_LADDR       4'd4 //last index number of the entity
 `define ENT_NOTHING     2'd3
 `define ENT_SNAKE_HEAD  2'b01
 `define ENT_SNAKE_TAIL  2'b10
@@ -24,7 +33,7 @@
 `define H_SQUARE_LAST_ADDR (`H_SQUARE - 1)
 `define V_SQUARE_LAST_ADDR (`V_SQUARE - 1)
 
-`define DRAWING_CYCLES_TO_WAIT 3'd3
+`define DRAWING_CYCLES_TO_WAIT 3'd7
 
 `define SPRITE_MAX 4
 `define SPRITE_CNT 3

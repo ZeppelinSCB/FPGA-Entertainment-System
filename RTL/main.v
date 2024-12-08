@@ -51,6 +51,12 @@ wire vga_clk, update_clk, vga5x_clk;
 wire clk_locked;
 wire reset_n;
 
+// Input Flags
+wire Flag_Up   ;
+wire Flag_Down ;
+wire Flag_Left ;
+wire Flag_Right;
+
 // HDIMI
 assign reset_n = (sys_reset_n & clk_locked);
 assign reset_p = !reset_n;
@@ -74,8 +80,12 @@ wire [7:0] sVGA_B;
 assign dir_out = dir; // for debug
 
 // Game logic
+wire Flag_GameOver, Flag_GameWon;
 wire [0:1] cur_ent_code;
 wire `TAIL_SIZE game_score;
+
+// Game State
+wire [2:0] game_state;
 
 clk_gen vga_clk_gen (
     .areset(~sys_reset_n), 
@@ -96,24 +106,41 @@ game_upd_clk upd_clk(
 
 // Key input
 key_input key_input_inst(
-    .iK_Left    (key_LEFT),
-    .iK_Right   (key_RGHT),
-    .iK_Up      (key_UUPP),
-    .iK_Down    (key_DOWN),
-    .iClk       (sys_clk ),
-    .oDirection (dir     )
+    .iK_Left    (key_LEFT  ),
+    .iK_Right   (key_RGHT  ),
+    .iK_Up      (key_UUPP  ),
+    .iK_Down    (key_DOWN  ),
+    .iClk       (sys_clk   ),
+    .oF_kUp     (Flag_Up   ),
+    .oF_kDown   (Flag_Down ),
+    .oF_kLeft   (Flag_Left ),
+    .oF_kRight  (Flag_Right),
+    .oDirection (dir       )
+);
+
+game_fsm game_fsm_inst(
+    .iClk        (sys_clk),
+    .iRst_n      (sys_reset_n),
+    .iKey_up     (Flag_Up   ), 
+    .iKey_down   (Flag_Down ), 
+    .iKey_left   (Flag_Left ), 
+    .iKey_right  (Flag_Right),
+    .iGame_won   (Flag_GameWon ),
+    .iGame_over  (Flag_GameOver),
+    .oState      (game_state)       
 );
 
 game_logic game_logic_module (
 	.vga_clk(vga_clk),
 	.update_clk(update_clk),
-	.reset(reset_p),
+	.reset_p(reset_p),
 	.direction(dir),
-	.x_in(src_coord_X),
+	.x_in(src_coord_X+1'b1),
 	.y_in(src_coord_Y),
 	.entity(cur_ent_code),
-	//.game_over(),
-	//.game_won(),
+    .game_state(game_state),
+	.game_over(Flag_GameOver ),
+	.game_won (Flag_GameWon),
 	.tail_count(game_score)
 );
 
@@ -138,6 +165,7 @@ vga_draw    vga_draw_inst(
     .iReset_n    (reset_n),
     .iColor_SW   (VISUAL_DEBUG),
     .iSprite     (cur_ent_code),
+    .iGame_state (game_state),
     .oRGB        (draw_RGB)
 );
 

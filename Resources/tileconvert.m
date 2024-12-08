@@ -1,8 +1,9 @@
 DIR = "E:\FPGA-Entertainment-System\Resources\";
 %Read image
-imageName = 'Input'
-raw = imread('Input.jpg');
-I = imresize(raw,[240,320],'bilinear');
+imageName = 'Hatsune_Miku';
+raw = imread('Hatsune_Miku.png');
+%I = imresize(raw,[240,320],'bilinear');
+I = imresize(raw,[16,16],'nearest');
 
 [Img1,map2] = rgb2ind(I,4,'dither');
 imshow(Img1,map2)
