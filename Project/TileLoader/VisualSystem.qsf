@@ -39,7 +39,7 @@
 
 set_global_assignment -name FAMILY "Cyclone IV E"
 set_global_assignment -name DEVICE EP4CE10F17C8
-set_global_assignment -name TOP_LEVEL_ENTITY vga_draw
+set_global_assignment -name TOP_LEVEL_ENTITY visual_main
 set_global_assignment -name ORIGINAL_QUARTUS_VERSION 23.1STD.1
 set_global_assignment -name PROJECT_CREATION_TIME_DATE "21:49:48  DECEMBER 02, 2024"
 set_global_assignment -name LAST_QUARTUS_VERSION "23.1std.1 Lite Edition"
@@ -65,15 +65,30 @@ set_global_assignment -name EDA_NATIVELINK_SIMULATION_TEST_BENCH tb_vga_draw -se
 set_global_assignment -name EDA_TEST_BENCH_NAME tb_vga_display -section_id eda_simulation
 set_global_assignment -name EDA_DESIGN_INSTANCE_NAME NA -section_id tb_vga_display
 set_global_assignment -name EDA_TEST_BENCH_MODULE_NAME tb_vga_display -section_id tb_vga_display
-set_global_assignment -name VERILOG_FILE ../../RTL/Visual/vga_draw.v
-set_global_assignment -name VERILOG_FILE ../../RTL/Visual/rgb_to_565.v
-set_global_assignment -name PARTITION_NETLIST_TYPE SOURCE -section_id Top
-set_global_assignment -name PARTITION_FITTER_PRESERVATION_LEVEL PLACEMENT_AND_ROUTING -section_id Top
-set_global_assignment -name PARTITION_COLOR 16764057 -section_id Top
 set_global_assignment -name EDA_TEST_BENCH_FILE ../../Sim/tb_vga_display.v -section_id tb_vga_display
 set_global_assignment -name EDA_TEST_BENCH_NAME tb_vga_draw -section_id eda_simulation
 set_global_assignment -name EDA_DESIGN_INSTANCE_NAME NA -section_id tb_vga_draw
 set_global_assignment -name EDA_TEST_BENCH_RUN_SIM_FOR "1 s" -section_id tb_vga_draw
 set_global_assignment -name EDA_TEST_BENCH_MODULE_NAME tb_vga_draw -section_id tb_vga_draw
 set_global_assignment -name EDA_TEST_BENCH_FILE ../../Sim/tb_vga_draw.v -section_id tb_vga_draw
+set_global_assignment -name QIP_FILE ../../RTL/ipcore_dir/ddio_out.qip
+set_global_assignment -name QIP_FILE ../../RTL/ipcore_dir/clk_gen.qip
+set_global_assignment -name VERILOG_FILE ../../RTL/Visual/vga_ctrl.v
+set_global_assignment -name VERILOG_FILE ../../RTL/Visual/start_page.v
+set_global_assignment -name VERILOG_FILE ../../RTL/Visual/SSEG_driver.v
+set_global_assignment -name VERILOG_FILE ../../RTL/Visual/SSEG_display.v
+set_global_assignment -name VERILOG_FILE ../../RTL/Visual/par_to_ser.v
+set_global_assignment -name VERILOG_FILE ../../RTL/Visual/page_start.v
+set_global_assignment -name VERILOG_FILE ../../RTL/Visual/Number.v
+set_global_assignment -name VERILOG_FILE ../../RTL/Visual/letter_character.v
+set_global_assignment -name VERILOG_FILE ../../RTL/Visual/hdmi_enc.v
+set_global_assignment -name VERILOG_FILE ../../RTL/Visual/hdmi_ctrl.v
+set_global_assignment -name VERILOG_FILE ../../RTL/Visual/encode.v
+set_global_assignment -name VERILOG_FILE ../../RTL/Visual/border.v
+set_global_assignment -name VERILOG_FILE ../../RTL/Visual/vga_draw.v
+set_global_assignment -name VERILOG_FILE ../../RTL/Visual/rgb_to_565.v
+set_global_assignment -name VERILOG_FILE ../../RTL/visual_main.v
+set_global_assignment -name PARTITION_NETLIST_TYPE SOURCE -section_id Top
+set_global_assignment -name PARTITION_FITTER_PRESERVATION_LEVEL PLACEMENT_AND_ROUTING -section_id Top
+set_global_assignment -name PARTITION_COLOR 16764057 -section_id Top
 set_instance_assignment -name PARTITION_HIERARCHY root_partition -to | -section_id Top

@@ -17,6 +17,7 @@
 `define STATE_TEST      3'b111
 
 // entities
+`define ENT_LADDR       4'd4 //last index number of the entity
 `define ENT_NOTHING     2'd3
 `define ENT_SNAKE_HEAD  2'b01
 `define ENT_SNAKE_TAIL  2'b10

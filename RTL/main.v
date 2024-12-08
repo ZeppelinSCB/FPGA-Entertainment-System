@@ -135,7 +135,7 @@ game_logic game_logic_module (
 	.update_clk(update_clk),
 	.reset_p(reset_p),
 	.direction(dir),
-	.x_in(src_coord_X),
+	.x_in(src_coord_X+1'b1),
 	.y_in(src_coord_Y),
 	.entity(cur_ent_code),
     .game_state(game_state),

@@ -86,8 +86,9 @@ always @(posedge vga_clk) begin
         else begin
             entity <= `ENT_NOTHING;
             end
-    else if (game_state == `STATE_TEST)
-        
+        end
+    else if (game_state == `STATE_TEST) // in debug mode
+            entity <= (grid_coord_x - 1)%`ENT_LADDR;
     else
         entity <= `ENT_NOTHING;
     end

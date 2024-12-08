@@ -45,18 +45,19 @@ end
 
 always@(iVGA_CLK) begin
     if(iSprite != `ENT_NOTHING)
-        rgb_game = rgb_sprite;
+        rgb_game <= rgb_sprite;
     else
-        rgb_game = rgb_background;
+        //rgb_game = rgb_background;
+        rgb_game <= rgb_sprite;
 end
 // selete the signal to output
 always @(iVGA_CLK) begin
     if(iColor_SW == 1'b1)
-        oRGB = rgb_background;
+        oRGB <= rgb_background;
     else if (iGame_state == `STATE_INGAME)
-        oRGB = rgb_game;
+        oRGB <= rgb_game;
     else
-        oRGB = rgb_menu;
+        oRGB <= rgb_menu;
 end
 
 // Draw the iSprite
@@ -74,14 +75,14 @@ always @(posedge iVGA_CLK or negedge iReset_n) begin
 		blue  <= sp[0][ivga_x % `H_SQUARE] [ivga_y % `V_SQUARE][2];
 	    end
 	else if((iSprite >= 0)&& (iSprite <= (`SPRITE_MAX -1)))begin
-        red   <= sp[iSprite][(ivga_x - 1) % `H_SQUARE] [(ivga_y) % `V_SQUARE][0];
-        green <= sp[iSprite][(ivga_x - 1) % `H_SQUARE] [(ivga_y) % `V_SQUARE][1];
-        blue  <= sp[iSprite][(ivga_x - 1) % `H_SQUARE] [(ivga_y) % `V_SQUARE][2];
+        red   <= sp[iSprite][(ivga_x) % `H_SQUARE] [(ivga_y) % `V_SQUARE][0];
+        green <= sp[iSprite][(ivga_x) % `H_SQUARE] [(ivga_y) % `V_SQUARE][1];
+        blue  <= sp[iSprite][(ivga_x) % `H_SQUARE] [(ivga_y) % `V_SQUARE][2];
         end
     else begin
-        red   <= sp[0][ivga_x % `H_SQUARE] [ivga_y % `V_SQUARE][0];
-        green <= sp[0][ivga_x % `H_SQUARE] [ivga_y % `V_SQUARE][1];
-        blue  <= sp[0][ivga_x % `H_SQUARE] [ivga_y % `V_SQUARE][2];
+        red   <= sp[3][ivga_x % `H_SQUARE] [ivga_y % `V_SQUARE][0];
+        green <= sp[3][ivga_x % `H_SQUARE] [ivga_y % `V_SQUARE][1];
+        blue  <= sp[3][ivga_x % `H_SQUARE] [ivga_y % `V_SQUARE][2];
         end
     end
 
