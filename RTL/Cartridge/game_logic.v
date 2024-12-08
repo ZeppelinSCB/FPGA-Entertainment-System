@@ -65,7 +65,35 @@ initial
 	assign grid_coord_x = (x_in / `H_SQUARE);
 	assign grid_coord_y = (y_in / `V_SQUARE);
 
-	// return entity code of the current x & y
+//Dynamic Snake Speed
+reg  [8:0] snak_cyc; //0.5 time the number of game cycle before moving the snake
+reg  [8:0] cycle_counter;
+reg  [0:0] snake_clk;
+always @(posedge update_clk or posedge reset) begin
+    if (reset)
+        snak_cyc <= 8'd4; //4 is ok
+    else
+        snak_cyc <= 8'd4;
+    end
+
+always @(posedge update_clk or posedge reset) begin
+    if (reset) begin
+        cycle_counter <= 0;
+        snake_clk <= 0;
+        end
+    else if(game_state == `STATE_INGAME) begin
+        if (cycle_counter >= (snak_cyc-1)) begin
+            cycle_counter <= 0;
+            snake_clk <= 1;
+            end
+        else begin
+            cycle_counter <= cycle_counter + 1;
+            snake_clk <= 0;
+            end
+        end
+    end
+
+// return entity code of the current x & y
 always @(posedge vga_clk) begin
     if (game_state == `STATE_INGAME) begin
         if (
@@ -119,7 +147,7 @@ always @(posedge vga_clk or posedge reset) begin
     end
 
 // move snake head
-always @(posedge update_clk or posedge reset) begin
+always @(posedge snake_clk or posedge reset) begin
 	if (reset) begin
 		snake_head_x <= `GRID_MID_WIDTH;
 		snake_head_y <= `GRID_MID_HEIGHT;
@@ -165,7 +193,7 @@ always @(posedge update_clk or posedge reset) begin
 	end
 
 // Move tails
-always @(posedge update_clk or posedge reset) begin
+always @(posedge snake_clk or posedge reset) begin
 	if (reset) 
         tails[0] <= tails[0];// do nothing
 	else begin

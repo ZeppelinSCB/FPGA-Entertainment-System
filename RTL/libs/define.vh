@@ -33,7 +33,7 @@
 `define H_SQUARE_LAST_ADDR (`H_SQUARE - 1)
 `define V_SQUARE_LAST_ADDR (`V_SQUARE - 1)
 
-`define DRAWING_CYCLES_TO_WAIT 3'd7
+`define DRAWING_CYCLES_TO_WAIT 3'd3
 
 `define SPRITE_MAX 4
 `define SPRITE_CNT 3

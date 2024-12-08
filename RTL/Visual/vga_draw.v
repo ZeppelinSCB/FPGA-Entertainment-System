@@ -127,8 +127,8 @@ always @(posedge iVGA_CLK) begin
     if(iGame_state == `STATE_INGAME)
         rgb_menu <= BLUE;
     else if(iGame_state == `STATE_START)
-        rgb_menu <= RED;
-    else
         rgb_menu <= GRAY;
+    else
+        rgb_menu <= RED;
     end
 endmodule
