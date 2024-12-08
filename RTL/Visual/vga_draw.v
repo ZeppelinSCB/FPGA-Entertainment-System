@@ -6,9 +6,10 @@ module	vga_draw	(	//	Read Out Side
                         ivga_x      ,
                         ivga_y      ,
 						//	Control Signals
-						iReset_n ,
+						iReset_n    ,
 						iColor_SW   ,
-						iSprite      ,  
+						iSprite     ,  
+                        iGame_state ,
                         //  VGA port
                         oRGB        
                     );
@@ -17,12 +18,15 @@ input  wire [9:0]   ivga_y;
 input			    iVGA_CLK;
 input			    iReset_n;
 input			    iColor_SW; // drawing mode: either game or colored lines
+input       [2:0]   iGame_state;
 input       [0:1]   iSprite; // entity to draw
 output reg  [15:0]  oRGB;
 
 reg red, green, blue;
 wire [15:0] rgb_sprite;   //wire to connect to module
-reg [15:0] rgb_background;//background color
+reg  [15:0] rgb_background;//background color
+reg  [15:0] rgb_game;      //menu color
+reg  [15:0] rgb_menu;      //menu color
 
 // Array of sprites
 /*
@@ -39,15 +43,20 @@ begin
 	`SPRITE_INIT
 end
 
+always@(iVGA_CLK) begin
+    if(iSprite != `ENT_NOTHING)
+        rgb_game = rgb_sprite;
+    else
+        rgb_game = rgb_background;
+end
 // selete the signal to output
 always @(iVGA_CLK) begin
     if(iColor_SW == 1'b1)
         oRGB = rgb_background;
-    else if (iSprite == `ENT_NOTHING)
-        oRGB = rgb_background;
-        //oRGB = rgb_sprite;
+    else if (iGame_state == `STATE_INGAME)
+        oRGB = rgb_game;
     else
-        oRGB = rgb_sprite;
+        oRGB = rgb_menu;
 end
 
 // Draw the iSprite
@@ -65,9 +74,9 @@ always @(posedge iVGA_CLK or negedge iReset_n) begin
 		blue  <= sp[0][ivga_x % `H_SQUARE] [ivga_y % `V_SQUARE][2];
 	    end
 	else if((iSprite >= 0)&& (iSprite <= (`SPRITE_MAX -1)))begin
-        red   <= sp[iSprite][(ivga_x) % `H_SQUARE] [(ivga_y) % `V_SQUARE][0];
-        green <= sp[iSprite][(ivga_x) % `H_SQUARE] [(ivga_y) % `V_SQUARE][1];
-        blue  <= sp[iSprite][(ivga_x) % `H_SQUARE] [(ivga_y) % `V_SQUARE][2];
+        red   <= sp[iSprite][(ivga_x - 1) % `H_SQUARE] [(ivga_y) % `V_SQUARE][0];
+        green <= sp[iSprite][(ivga_x - 1) % `H_SQUARE] [(ivga_y) % `V_SQUARE][1];
+        blue  <= sp[iSprite][(ivga_x - 1) % `H_SQUARE] [(ivga_y) % `V_SQUARE][2];
         end
     else begin
         red   <= sp[0][ivga_x % `H_SQUARE] [ivga_y % `V_SQUARE][0];
@@ -90,7 +99,7 @@ localparam
 
 // Draw the Background
 always @(posedge iVGA_CLK) begin
-    if(!iColor_SW)
+    if(!(iColor_SW ))
         rgb_background <= 16'hffff;
     else
     begin
@@ -111,5 +120,14 @@ always @(posedge iVGA_CLK) begin
         else
             rgb_background <= WHITE;
         end
+    end
+
+always @(posedge iVGA_CLK) begin
+    if(iGame_state == `STATE_INGAME)
+        rgb_menu <= BLUE;
+    else if(iGame_state == `STATE_START)
+        rgb_menu <= RED;
+    else
+        rgb_menu <= GRAY;
     end
 endmodule
