@@ -17,11 +17,14 @@
 `define STATE_TEST      3'b111
 
 // entities
-`define ENT_LADDR       4'd4 //last index number of the entity
-`define ENT_NOTHING     2'd3
-`define ENT_SNAKE_HEAD  2'b01
-`define ENT_SNAKE_TAIL  2'b10
-`define ENT_APPLE       2'b00
+`define ENT_BITS        3
+`define ENT_LADDR       (`ENT_BITS-1)   //Number of bits for the entity
+`define ENT_LINDEX      3'd4 //last index number of the entity
+
+`define ENT_NOTHING     3'd3
+`define ENT_SNAKE_HEAD  3'b01
+`define ENT_SNAKE_TAIL  3'b10
+`define ENT_APPLE       3'b00
 `define ENT_WALL        3'd4
 
 // constants for output and game grid
@@ -33,11 +36,7 @@
 `define H_SQUARE_LAST_ADDR (`H_SQUARE - 1)
 `define V_SQUARE_LAST_ADDR (`V_SQUARE - 1)
 
-`define DRAWING_CYCLES_TO_WAIT 3'd7
-
-`define SPRITE_MAX 4
-`define SPRITE_CNT 3
-`define SPRITE_MSB (`SPRITE_CNT - 1)
+`define DRAWING_CYCLES_TO_WAIT 3'd3
 
 `define GRID_WIDTH (`VGA_WIDTH/`H_SQUARE)
 `define GRID_HEIGHT (`VGA_HEIGHT/`V_SQUARE)

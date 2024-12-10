@@ -1,6 +1,6 @@
 from PIL import Image, ImageDraw
 
-filename = "Hatsune_Miku"
+filename = "Snow_Miku"
 index = 1
 
 im = Image.open(filename + ".png").convert('RGB')

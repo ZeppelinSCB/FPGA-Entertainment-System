@@ -3,8 +3,8 @@ module vga_ctrl(
     input  wire         sys_rst_n   , //Reset signal. Low level is effective
     input  wire [15:0]  pix_data    , //Color information
 
-    output wire [10:0]  pix_x       , //X coordinate
-    output wire [10:0]  pix_y       , //Y coordinate
+    output wire [10:0]  pix_x       , //X coordinate from zero
+    output wire [10:0]  pix_y       , //Y coordinate from zero
     output wire         hsync       , //Line sync signal
     output wire         vsync       , //Field sync signal
     output wire [15:0]  rgb         , //RGB565 data

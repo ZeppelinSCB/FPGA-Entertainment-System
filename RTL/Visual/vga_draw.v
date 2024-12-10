@@ -19,7 +19,7 @@ input			    iVGA_CLK;
 input			    iReset_n;
 input			    iColor_SW; // drawing mode: either game or colored lines
 input       [2:0]   iGame_state;
-input       [0:1]   iSprite; // entity to draw
+input       [0:`ENT_LADDR]   iSprite; // entity to draw
 output reg  [15:0]  oRGB;
 
 reg red, green, blue;
@@ -36,7 +36,7 @@ reg  [15:0] rgb_menu;      //menu color
 
 Every sprite consists of 3 bits - RGB values of a particular pixel
 */
-reg [0:2] sp [0:3][0:`H_SQUARE_LAST_ADDR][0:`V_SQUARE_LAST_ADDR];
+reg [0:2] sp [0:4][0:`H_SQUARE_LAST_ADDR][0:`V_SQUARE_LAST_ADDR];
 // assign value to the sprite
 initial
 begin
@@ -74,7 +74,7 @@ always @(posedge iVGA_CLK or negedge iReset_n) begin
 		green <= sp[0][ivga_x % `H_SQUARE] [ivga_y % `V_SQUARE][1];
 		blue  <= sp[0][ivga_x % `H_SQUARE] [ivga_y % `V_SQUARE][2];
 	    end
-	else if((iSprite >= 0)&& (iSprite <= (`SPRITE_MAX -1)))begin
+	else if((iSprite >= 0)&& (iSprite <= `ENT_LINDEX))begin
         red   <= sp[iSprite][(ivga_x) % `H_SQUARE] [(ivga_y) % `V_SQUARE][0];
         green <= sp[iSprite][(ivga_x) % `H_SQUARE] [(ivga_y) % `V_SQUARE][1];
         blue  <= sp[iSprite][(ivga_x) % `H_SQUARE] [(ivga_y) % `V_SQUARE][2];
@@ -127,8 +127,8 @@ always @(posedge iVGA_CLK) begin
     if(iGame_state == `STATE_INGAME)
         rgb_menu <= BLUE;
     else if(iGame_state == `STATE_START)
-        rgb_menu <= RED;
-    else
         rgb_menu <= GRAY;
+    else
+        rgb_menu <= RED;
     end
 endmodule

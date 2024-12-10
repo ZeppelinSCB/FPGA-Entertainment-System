@@ -4,10 +4,11 @@ module rgb_to_565(
     iB          ,
     oRGB_565    
 );
-
+parameter   GRAY    = 16'hD69A;
 input  wire iR;
 input  wire iG;
 input  wire iB;
+wire [15:0] RGB_565;
 output wire [15:0] oRGB_565;
 
 reg [4:0] hRed;
@@ -33,6 +34,7 @@ always @(*) begin
         endcase
 end
 
-assign oRGB_565 = {hRed,hGreen,hBlue};
+assign RGB_565 = {hRed,hGreen,hBlue};
+assign oRGB_565 = (RGB_565 == 16'hffff) ? GRAY : RGB_565;
 
 endmodule
