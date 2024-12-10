@@ -5,7 +5,7 @@ module game_logic (
 	input [0:1] direction,
 	input wire [9:0] x_in, y_in, // new values are given at each clock cycle
     input wire [2:0] game_state,
-	output reg [0:1] entity,
+	output reg [0:`ENT_LADDR] entity,
     output wire game_over,
 	output reg  game_won,
 	output reg `TAIL_SIZE tail_count
@@ -16,6 +16,7 @@ wire `Y_SIZE grid_coord_y;
 reg  `X_SIZE snake_head_x, apple_x;
 reg  `Y_SIZE snake_head_y, apple_y;
 reg  is_cur_coord_tail;
+reg  is_cur_coord_wall;
 // reg [`MEM_BITS_HOR_G*`TAIL_SIZE-1:0]   tail_x;
 // reg [`MEM_BITS_VERT_G*`TAIL_SIZE-1:0]  tail_y;
 reg `COORD_SIZE tails [0:`LAST_TAIL_ADDR];
@@ -71,9 +72,9 @@ reg  [8:0] cycle_counter;
 reg  [0:0] snake_clk;
 always @(posedge update_clk or posedge reset) begin
     if (reset)
-        snak_cyc <= 8'd4; //4 is ok
+        snak_cyc <= 8'd1; //4 is ok
     else
-        snak_cyc <= 8'd4;
+        snak_cyc <= 8'd1;
     end
 
 always @(posedge update_clk or posedge reset) begin
@@ -111,14 +112,37 @@ always @(posedge vga_clk) begin
         else if (is_cur_coord_tail) begin
             entity <= `ENT_SNAKE_TAIL;
             end
+        else if (is_cur_coord_wall) begin
+            entity <= `ENT_WALL;
+            end
         else begin
             entity <= `ENT_NOTHING;
             end
         end
     else if (game_state == `STATE_TEST) // in debug mode
-            entity <= (grid_coord_x - 1)%`ENT_LADDR;
+        entity <= (grid_coord_x - 1)%`ENT_LADDR;
     else
         entity <= `ENT_NOTHING;
+    end
+
+// check if the current coordinate is a wall
+always @(posedge vga_clk or posedge reset) begin
+    if (reset) begin
+        is_cur_coord_wall <= 0;
+        end
+    else if (game_state == `STATE_INGAME) begin
+        is_cur_coord_wall = 0;
+        if (
+            grid_coord_x == 0               ||
+            grid_coord_x == `LAST_HOR_ADDR  ||
+            grid_coord_y == 0               ||
+            grid_coord_y == `LAST_VER_ADDR
+        ) begin
+            is_cur_coord_wall = 1;
+            end
+        end
+    else
+        is_cur_coord_wall = 0;
     end
 
 // traverse the array of tails and see if
@@ -211,8 +235,20 @@ always @(posedge snake_clk or posedge reset) begin
 	end
 
 // check if the snake head is on the wall
-always @(posedge update_clk or posedge reset) begin
-    hit_wall <= 0;
+always @(posedge snake_clk or posedge reset) begin
+    if(reset) begin
+        hit_wall <= 0;
+        end
+    else if (
+            snake_head_x == 0               ||
+            snake_head_x == `LAST_HOR_ADDR  ||
+            snake_head_y == 0               ||
+            snake_head_y == `LAST_VER_ADDR
+        ) begin
+            hit_wall <= 1;
+            end
+    else
+        hit_wall <= 0;
     end
 
 // check if the snake head is on the apple

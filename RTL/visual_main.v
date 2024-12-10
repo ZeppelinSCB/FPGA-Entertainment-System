@@ -1,7 +1,7 @@
 // top level module
 `include "./libs/define.vh"
 
-module main (
+module visual_main (
 	// joystick input
 	input wire
 		key_UUPP    ,
@@ -119,6 +119,7 @@ vga_ctrl vga_ctrl_inst(
 );
 
 // VGA renderer
+/*
 vga_draw    vga_draw_inst(
     .iVGA_CLK    (vga_clk),
     .ivga_x      (src_coord_X),
@@ -128,6 +129,14 @@ vga_draw    vga_draw_inst(
     .iSprite     (cur_ent_code),
     .iGame_state (game_state),
     .oRGB        (draw_RGB)
+);
+*/
+read_rom_pic read_rom_pic_inst(
+    .vga_clk        (vga_clk),
+    .sys_rst_n      (reset_n),
+    .pix_x          (src_coord_X),
+    .pix_y          (src_coord_Y),
+    .pix_data_out   (draw_RGB)
 );
 
     

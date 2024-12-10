@@ -81,7 +81,7 @@ assign dir_out = dir; // for debug
 
 // Game logic
 wire Flag_GameOver, Flag_GameWon;
-wire [0:1] cur_ent_code;
+wire [0:`ENT_LADDR] cur_ent_code;
 wire `TAIL_SIZE game_score;
 
 // Game State
@@ -110,7 +110,7 @@ key_input key_input_inst(
     .iK_Right   (key_RGHT  ),
     .iK_Up      (key_UUPP  ),
     .iK_Down    (key_DOWN  ),
-    .iClk       (sys_clk   ),
+    .iClk       (update_clk   ),
     .oF_kUp     (Flag_Up   ),
     .oF_kDown   (Flag_Down ),
     .oF_kLeft   (Flag_Left ),
