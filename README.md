@@ -1,7 +1,7 @@
 # FPGA Entertainment System - Snake
 ## Demo Video
 
-https://github.com/user-attachments/assets/2adf7025-f16d-4a7c-a87f-ea3474abcfde
+https://github.com/user-attachments/assets/a95057ca-2bf3-4c8f-8d43-8fdadced6ac1
 
 ## Introduction
 The FES-Snake project aims to create a Snake Game on Cyclone IV FPGA Chips. 
