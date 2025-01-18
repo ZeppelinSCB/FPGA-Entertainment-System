@@ -8,8 +8,6 @@ wire        R         ;
 wire        G         ;
 wire        B         ;
 wire [15:0] out_RGB   ;
-wire        hsync     ;
-wire        vsync     ;
 wire        valid     ;
 reg  [9:0]  VGA_X     ;
 reg  [9:0]  VGA_Y     ;

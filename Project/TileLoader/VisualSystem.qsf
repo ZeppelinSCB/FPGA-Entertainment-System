@@ -39,7 +39,7 @@
 
 set_global_assignment -name FAMILY "Cyclone IV E"
 set_global_assignment -name DEVICE EP4CE10F17C8
-set_global_assignment -name TOP_LEVEL_ENTITY visual_main
+set_global_assignment -name TOP_LEVEL_ENTITY vga_draw
 set_global_assignment -name ORIGINAL_QUARTUS_VERSION 23.1STD.1
 set_global_assignment -name PROJECT_CREATION_TIME_DATE "21:49:48  DECEMBER 02, 2024"
 set_global_assignment -name LAST_QUARTUS_VERSION "23.1std.1 Lite Edition"
@@ -61,7 +61,7 @@ set_global_assignment -name EDA_GENERATE_FUNCTIONAL_NETLIST OFF -section_id eda_
 set_global_assignment -name POWER_PRESET_COOLING_SOLUTION "23 MM HEAT SINK WITH 200 LFPM AIRFLOW"
 set_global_assignment -name POWER_BOARD_THERMAL_MODEL "NONE (CONSERVATIVE)"
 set_global_assignment -name EDA_TEST_BENCH_ENABLE_STATUS TEST_BENCH_MODE -section_id eda_simulation
-set_global_assignment -name EDA_NATIVELINK_SIMULATION_TEST_BENCH tb_read_rom_pic -section_id eda_simulation
+set_global_assignment -name EDA_NATIVELINK_SIMULATION_TEST_BENCH tb_vga_draw -section_id eda_simulation
 set_global_assignment -name EDA_TEST_BENCH_NAME tb_vga_display -section_id eda_simulation
 set_global_assignment -name EDA_DESIGN_INSTANCE_NAME NA -section_id tb_vga_display
 set_global_assignment -name EDA_TEST_BENCH_MODULE_NAME tb_vga_display -section_id tb_vga_display
@@ -120,11 +120,11 @@ set_location_assignment PIN_E16 -to key_RGHT
 set_location_assignment PIN_M1 -to key_UUPP
 set_location_assignment PIN_E1 -to sys_clk
 set_location_assignment PIN_M15 -to sys_reset_n
-set_global_assignment -name EDA_TEST_BENCH_FILE ../../Sim/tb_vga_display.v -section_id tb_vga_display
-set_global_assignment -name EDA_TEST_BENCH_FILE ../../Sim/tb_vga_draw.v -section_id tb_vga_draw
 set_global_assignment -name EDA_TEST_BENCH_NAME tb_read_rom_pic -section_id eda_simulation
 set_global_assignment -name EDA_DESIGN_INSTANCE_NAME NA -section_id tb_read_rom_pic
 set_global_assignment -name EDA_TEST_BENCH_MODULE_NAME tb_read_rom_pic -section_id tb_read_rom_pic
+set_global_assignment -name EDA_TEST_BENCH_FILE ../../Sim/tb_vga_display.v -section_id tb_vga_display
+set_global_assignment -name EDA_TEST_BENCH_FILE ../../Sim/tb_vga_draw.v -section_id tb_vga_draw
 set_global_assignment -name EDA_TEST_BENCH_FILE ../../Sim/tb_read_rom_pic.v -section_id tb_read_rom_pic
 set_global_assignment -name PARTITION_NETLIST_TYPE SOURCE -section_id Top
 set_global_assignment -name PARTITION_FITTER_PRESERVATION_LEVEL PLACEMENT_AND_ROUTING -section_id Top
